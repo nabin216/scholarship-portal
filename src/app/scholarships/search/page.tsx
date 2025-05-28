@@ -546,7 +546,12 @@ const ScholarshipSearch = () => {
             {/* Scholarship Cards */}
             <div className="space-y-4">
               {sortedScholarships && sortedScholarships.length > 0 && Array.isArray(sortedScholarships) && sortedScholarships.map((scholarship) => (
-                <div key={scholarship.id} className="bg-white rounded-md shadow-sm overflow-hidden">
+                <div key={scholarship.id} className="bg-white rounded-md shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer">
+                  <Link 
+                    href={scholarship.application_url ? scholarship.application_url : `/scholarships/scholarshipdetails?id=${scholarship.id}`}
+                    target={scholarship.application_url ? "_blank" : "_self"}
+                    className="block"
+                  >
                   <div className="flex">                    {/* Scholarship Image */}
                     <div className="w-1/5 bg-gray-200 flex items-center justify-center">
                       {scholarship.image ? (
@@ -594,18 +599,22 @@ const ScholarshipSearch = () => {
                       <div className="w-1/4 flex flex-col items-end justify-between">
                         <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded">
                           {scholarship.country_name || scholarship.country}
-                        </span>
-                        <a
-                          href={scholarship.application_url || `/scholarships/${scholarship.id}`}
-                          target={scholarship.application_url ? "_blank" : "_self"}
-                          rel={scholarship.application_url ? "noopener noreferrer" : ""}
-                          className="bg-yellow-300 hover:bg-yellow-400 px-4 py-2 rounded text-sm font-medium"
+                        </span>                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (scholarship.application_url) {
+                              window.open(scholarship.application_url, '_blank', 'noopener,noreferrer');
+                            } else {
+                              window.location.href = `/scholarships/scholarshipdetails?id=${scholarship.id}`;
+                            }
+                          }}
+                          className="bg-yellow-300 hover:bg-yellow-400 px-4 py-2 rounded text-sm font-medium z-10"
                         >
                           {scholarship.application_url ? 'Apply Now' : 'View Details'}
-                        </a>
-                      </div>
-                    </div>
+                        </button>
+                      </div>                    </div>
                   </div>
+                  </Link>
                 </div>
               ))}
             </div>
