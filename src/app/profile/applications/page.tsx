@@ -19,6 +19,7 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [updatingStatus, setUpdatingStatus] = useState<number | null>(null);
   useEffect(() => {
     const fetchApplications = async () => {
       setLoading(true);
@@ -48,9 +49,44 @@ export default function ApplicationsPage() {
         setLoading(false);
       }
     };
-    
-    fetchApplications();
+      fetchApplications();
   }, []);
+
+  const updateApplicationStatus = async (applicationId: number, newStatus: string) => {
+    setUpdatingStatus(applicationId);
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('Authentication token not found');
+      
+      const response = await fetch(`http://localhost:8000/api/user/applications/${applicationId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update application status');
+      }
+      
+      // Update the local state
+      setApplications(prev => 
+        prev.map(app => 
+          app.id === applicationId 
+            ? { ...app, status: newStatus as Application['status'] }
+            : app
+        )
+      );
+      
+    } catch (err) {
+      console.error('Error updating application status:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update status');
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
@@ -177,9 +213,38 @@ export default function ApplicationsPage() {
                         <div className="text-sm text-gray-500">
                           {new Date(application.date_applied).toLocaleDateString()}
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        {getStatusBadge(application.status)}
+                      </td>                      <td className="px-6 py-4">
+                        <select
+                          value={application.status}
+                          onChange={(e) => updateApplicationStatus(application.id, e.target.value)}
+                          disabled={updatingStatus === application.id}
+                          className="text-xs px-2 py-1 rounded-full border-0 focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                          style={{
+                            backgroundColor: 
+                              application.status === 'pending' ? '#fef3c7' :
+                              application.status === 'submitted' ? '#dbeafe' :
+                              application.status === 'under_review' ? '#e9d5ff' :
+                              application.status === 'approved' ? '#dcfce7' :
+                              application.status === 'rejected' ? '#fee2e2' : '#f3f4f6',
+                            color:
+                              application.status === 'pending' ? '#92400e' :
+                              application.status === 'submitted' ? '#1e40af' :
+                              application.status === 'under_review' ? '#7c3aed' :
+                              application.status === 'approved' ? '#166534' :
+                              application.status === 'rejected' ? '#dc2626' : '#374151'
+                          }}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="submitted">Submitted</option>
+                          <option value="under_review">Under Review</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                        {updatingStatus === application.id && (
+                          <div className="ml-2 inline-block">
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-500"></div>
+                          </div>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
                         <Link 

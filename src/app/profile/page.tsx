@@ -337,18 +337,13 @@ const ProfilePage = () => {
               >
                 My Saved Scholarships
               </Link>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block py-4 px-4 text-sm font-medium ${
-                  activeTab === 'applications'
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
-                }`}
-                onClick={() => setActiveTab('applications')}
+            </li>            <li className="mr-2">
+              <Link
+                href="/profile/applications"
+                className={`inline-block py-4 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-300 transition-colors`}
               >
                 My Applications
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
@@ -673,114 +668,7 @@ const ProfilePage = () => {
               </div>
             </form>
           </div>        )}
-        
-        {/* Applications Tab */}
-        {activeTab === 'applications' && (
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">My Scholarship Applications</h2>
-            
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Scholarship
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date Applied
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {/* Sample data - This would be populated from API in a real app */}
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">International Student Scholarship</div>
-                      <div className="text-sm text-gray-500">University of Example</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">May 15, 2025</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                        Pending
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <a href="#" className="text-blue-600 hover:text-blue-900">View Details</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">Engineering Excellence Award</div>
-                      <div className="text-sm text-gray-500">Technical Institute</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">April 28, 2025</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        Approved
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <a href="#" className="text-blue-600 hover:text-blue-900">View Details</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">Research Grant Program</div>
-                      <div className="text-sm text-gray-500">National Science Foundation</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">March 12, 2025</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                        Rejected
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <a href="#" className="text-blue-600 hover:text-blue-900">View Details</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
-            {/* Empty state */}
-            {/* 
-            <div className="text-center py-10">
-              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No applications yet</h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Start applying for scholarships to see your applications here.
-              </p>
-              <div className="mt-6">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  onClick={() => router.push('/scholarships/search')}
-                >
-                  <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                  </svg>
-                  Browse Scholarships
-                </button>
-              </div>
-            </div>
-            */}
-          </div>
-        )}
-      </div>
+        </div>
     </div>
   );
 };

@@ -1,7 +1,5 @@
 {
-  "/scholarships/search/page": "app/scholarships/search/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/profile/saved/page": "app/profile/saved/page.js",
   "/profile/applications/page": "app/profile/applications/page.js",
-  "/Authentication/login/page": "app/Authentication/login/page.js"
+  "/Authentication/login/page": "app/Authentication/login/page.js",
+  "/profile/page": "app/profile/page.js"
 }
