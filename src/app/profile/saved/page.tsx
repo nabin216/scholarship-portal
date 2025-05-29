@@ -4,18 +4,25 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../Authentication/context/AuthContext';
 
-interface Scholarship {
+interface ScholarshipDetails {
   id: number;
   title: string;
   provider: string;
-  amount: number;
+  amount: string;
   deadline: string;
   description: string;
+  country?: string;
+  country_name?: string;
+  levels?: string[];
+  categories?: string[];
+  image?: string;
+  application_url?: string;
 }
 
 interface SavedScholarship {
   id: number;
-  scholarship: Scholarship;
+  scholarship: number; // This is the scholarship ID
+  scholarship_details: ScholarshipDetails;
   date_saved: string;
 }
 
@@ -24,6 +31,7 @@ export default function SavedScholarshipsPage() {
   const [savedScholarships, setSavedScholarships] = useState<SavedScholarship[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSavedScholarships = async () => {
@@ -33,18 +41,17 @@ export default function SavedScholarshipsPage() {
       try {
         const token = localStorage.getItem('authToken');
         if (!token) throw new Error('Authentication token not found');
-        
-        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+          const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           headers: {
-            'Authorization': `Token ${token}`,
+            'Authorization': `Bearer ${token}`,
           }
         });
         
         if (!response.ok) {
           throw new Error('Failed to fetch saved scholarships');
-        }
-        
+        }        
         const data = await response.json();
+        console.log('Saved scholarships API response:', data);
         setSavedScholarships(data);
       } catch (err) {
         console.error('Error fetching saved scholarships:', err);
@@ -56,16 +63,17 @@ export default function SavedScholarshipsPage() {
     
     fetchSavedScholarships();
   }, []);
-
   const handleRemove = async (scholarshipId: number) => {
     try {
+      setError(null);
+      setSuccessMessage(null);
+      
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('Authentication token not found');
-      
-      const response = await fetch(`http://localhost:8000/api/user/saved-scholarships/${scholarshipId}/`, {
+        const response = await fetch(`http://localhost:8000/api/user/saved-scholarships/${scholarshipId}/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Token ${token}`,
+          'Authorization': `Bearer ${token}`,
         }
       });
       
@@ -75,71 +83,84 @@ export default function SavedScholarshipsPage() {
       
       // Remove from state
       setSavedScholarships(prev => prev.filter(item => item.id !== scholarshipId));
+      setSuccessMessage('Scholarship removed successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       console.error('Error removing scholarship:', err);
       setError(err instanceof Error ? err.message : 'An error occurred while removing the scholarship');
     }
   };
-
-  // Sample data for display purposes
+  // Sample data for display purposes (matching API structure)
   const sampleSavedScholarships = [
     {
       id: 1,
-      scholarship: {
+      scholarship: 101,
+      scholarship_details: {
         id: 101,
         title: "Merit Scholarship",
         provider: "Global Education Fund",
-        amount: 5000,
+        amount: "5000",
         deadline: "2025-06-30",
-        description: "A scholarship for outstanding academic achievements."
+        description: "A scholarship for outstanding academic achievements.",
+        country_name: "United States"
       },
       date_saved: "2025-05-10"
     },
     {
       id: 2,
-      scholarship: {
+      scholarship: 102,
+      scholarship_details: {
         id: 102,
         title: "STEM Excellence Award",
         provider: "Tech Innovators Foundation",
-        amount: 7500,
+        amount: "7500",
         deadline: "2025-07-15",
-        description: "Awarded to students with exceptional achievements in STEM fields."
+        description: "Awarded to students with exceptional achievements in STEM fields.",
+        country_name: "Canada"
       },
       date_saved: "2025-05-15"
     },
     {
       id: 3,
-      scholarship: {
+      scholarship: 103,
+      scholarship_details: {
         id: 103,
         title: "Future Leaders Scholarship",
         provider: "Leadership Academy",
-        amount: 3000,
+        amount: "3000",
         deadline: "2025-08-01",
-        description: "For students who demonstrate leadership skills in their community."
+        description: "For students who demonstrate leadership skills in their community.",
+        country_name: "United Kingdom"
       },
       date_saved: "2025-05-20"
     },
     {
       id: 4,
-      scholarship: {
+      scholarship: 104,
+      scholarship_details: {
         id: 104,
         title: "Arts and Culture Grant",
         provider: "Creative Arts Foundation",
-        amount: 2500,
+        amount: "2500",
         deadline: "2025-09-15",
-        description: "Supporting students pursuing degrees in arts, music, or cultural studies."
+        description: "Supporting students pursuing degrees in arts, music, or cultural studies.",
+        country_name: "Australia"
       },
       date_saved: "2025-05-22"
     },
     {
       id: 5,
-      scholarship: {
+      scholarship: 105,
+      scholarship_details: {
         id: 105,
         title: "Global Citizenship Scholarship",
         provider: "International Education Institute",
-        amount: 10000,
+        amount: "10000",
         deadline: "2025-06-15",
-        description: "For students who contribute to international understanding and cooperation."
+        description: "For students who contribute to international understanding and cooperation.",
+        country_name: "Germany"
       },
       date_saved: "2025-05-25"
     }
@@ -161,15 +182,24 @@ export default function SavedScholarshipsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
-        <div className="mb-8">
+      <div className="container mx-auto px-4">        <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Saved Scholarships</h1>
           <p className="text-gray-600 mt-2">Manage your bookmarked scholarships</p>
+          {savedScholarships.length > 0 && (
+            <p className="text-sm text-gray-500 mt-1">
+              {savedScholarships.length} scholarship{savedScholarships.length !== 1 ? 's' : ''} saved
+            </p>
+          )}
         </div>
-        
-        {error && (
+          {error && (
           <div className="mb-6 bg-red-50 border-l-4 border-red-400 p-4">
             <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+        
+        {successMessage && (
+          <div className="mb-6 bg-green-50 border-l-4 border-green-400 p-4">
+            <p className="text-sm text-green-700">{successMessage}</p>
           </div>
         )}
         
@@ -199,10 +229,21 @@ export default function SavedScholarshipsPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {displayScholarships.map((item) => {
+                <tbody className="bg-white divide-y divide-gray-200">                  {displayScholarships.map((item) => {
+                    const scholarshipDetails = item.scholarship_details;
+                    
+                    if (!scholarshipDetails) {
+                      return (
+                        <tr key={item.id} className="hover:bg-gray-50">
+                          <td colSpan={6} className="px-6 py-4 text-center text-red-600">
+                            Error: Missing scholarship details
+                          </td>
+                        </tr>
+                      );
+                    }
+                    
                     const daysToDeadline = Math.ceil(
-                      (new Date(item.scholarship.deadline).getTime() - new Date().getTime()) / 
+                      (new Date(scholarshipDetails.deadline).getTime() - new Date().getTime()) / 
                       (1000 * 60 * 60 * 24)
                     );
                     
@@ -211,25 +252,25 @@ export default function SavedScholarshipsPage() {
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">
                             <Link 
-                              href={`/scholarships/scholarshipdetails?id=${item.scholarship.id}`}
+                              href={`/scholarships/scholarshipdetails?id=${scholarshipDetails.id}`}
                               className="hover:text-blue-600"
                             >
-                              {item.scholarship.title}
+                              {scholarshipDetails.title}
                             </Link>
                           </div>
                           <div className="text-sm text-gray-500 line-clamp-1">
-                            {item.scholarship.description}
+                            {scholarshipDetails.description}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-gray-500">{item.scholarship.provider}</div>
+                          <div className="text-sm text-gray-500">{scholarshipDetails.provider}</div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900">${item.scholarship.amount}</div>
+                          <div className="text-sm text-gray-900">${scholarshipDetails.amount}</div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-900">
-                            {new Date(item.scholarship.deadline).toLocaleDateString()}
+                            {new Date(scholarshipDetails.deadline).toLocaleDateString()}
                           </div>
                           {daysToDeadline > 0 && daysToDeadline <= 30 ? (
                             <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
@@ -249,7 +290,7 @@ export default function SavedScholarshipsPage() {
                         <td className="px-6 py-4 text-center">
                           <div className="flex justify-center space-x-3">
                             <Link 
-                              href={`/scholarships/scholarshipdetails?id=${item.scholarship.id}`}
+                              href={`/scholarships/scholarshipdetails?id=${scholarshipDetails.id}`}
                               className="text-blue-600 hover:text-blue-900"
                             >
                               <span className="sr-only">View</span>

@@ -7,7 +7,7 @@ interface UserProfile {
   bio?: string;
   education?: string;
   phone_number?: string;
-  address?: string;
+  country?: string;
   date_of_birth?: string;
   profile_picture?: string;
 }

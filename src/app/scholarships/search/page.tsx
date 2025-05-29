@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Scholarship } from '../../../types/scholarship';
 import Link from 'next/link';
+import { useAuth } from '../../Authentication/context/AuthContext';
 
 interface Filters {
   levels: string;
@@ -23,6 +24,8 @@ interface SortConfig {
 
 const ScholarshipSearch = () => {  
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);  
@@ -38,6 +41,8 @@ const ScholarshipSearch = () => {
   });
   const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'deadline', direction: 'asc' });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [savingScholarships, setSavingScholarships] = useState<Set<number>>(new Set());
+  const [savedScholarships, setSavedScholarships] = useState<Set<number>>(new Set());
 
   // Initialize filters from URL parameters
   useEffect(() => {
@@ -99,10 +104,116 @@ const ScholarshipSearch = () => {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchScholarships();
+    };    fetchScholarships();
   }, [filters, searchParams]);
+
+  // Fetch saved scholarships when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      fetchSavedScholarships();
+    }
+  }, [isAuthenticated, user]);
+
+  const fetchSavedScholarships = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });      if (response.ok) {
+        const data = await response.json();
+        const savedIds = new Set<number>(data.map((saved: any) => Number(saved.scholarship)));
+        setSavedScholarships(savedIds);
+      }
+    } catch (error) {
+      console.error('Error fetching saved scholarships:', error);
+    }
+  };
+
+  const handleSaveScholarship = async (scholarshipId: number) => {
+    if (!isAuthenticated) {
+      // Redirect to login if not authenticated
+      router.push('/Authentication/login');
+      return;
+    }
+
+    setSavingScholarships(prev => new Set(prev).add(scholarshipId));
+
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('Authentication token not found');
+
+      if (savedScholarships.has(scholarshipId)) {
+        // Remove from saved
+        const response = await fetch(`http://localhost:8000/api/user/saved-scholarships/`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (response.ok) {
+          const savedItems = await response.json();
+          const savedItem = savedItems.find((item: any) => item.scholarship === scholarshipId);
+          
+          if (savedItem) {
+            const deleteResponse = await fetch(`http://localhost:8000/api/user/saved-scholarships/${savedItem.id}/`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              }
+            });
+
+            if (deleteResponse.ok) {
+              setSavedScholarships(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(scholarshipId);
+                return newSet;
+              });
+            }
+          }
+        }
+      } else {
+        // Add to saved
+        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ scholarship: scholarshipId }),
+        });
+
+        if (response.ok) {
+          setSavedScholarships(prev => new Set(prev).add(scholarshipId));
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          if (response.status === 400 && errorData.non_field_errors && 
+              errorData.non_field_errors[0]?.includes('already exists')) {
+            // Already saved, just update state
+            setSavedScholarships(prev => new Set(prev).add(scholarshipId));
+          } else {
+            throw new Error('Failed to save scholarship');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error saving scholarship:', error);
+      alert('Failed to save scholarship. Please try again.');
+    } finally {
+      setSavingScholarships(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(scholarshipId);
+        return newSet;
+      });
+    }
+  };
+  
   const handleFilterChange = (key: keyof Filters, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -594,25 +705,32 @@ const ScholarshipSearch = () => {
                             Levels: {scholarship.levels.map(l => l.name).join(', ')}
                           </span>
                         </div>
-                      </div>
-                        {/* Right side with button */}
+                      </div>                        {/* Right side with button */}
                       <div className="w-1/4 flex flex-col items-end justify-between">
                         <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded">
                           {scholarship.country_name || scholarship.country}
-                        </span>                        <button
+                        </span>                        
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            if (scholarship.application_url) {
-                              window.open(scholarship.application_url, '_blank', 'noopener,noreferrer');
-                            } else {
-                              window.location.href = `/scholarships/scholarshipdetails?id=${scholarship.id}`;
-                            }
+                            e.preventDefault();
+                            handleSaveScholarship(scholarship.id);
                           }}
-                          className="bg-yellow-300 hover:bg-yellow-400 px-4 py-2 rounded text-sm font-medium z-10"
+                          disabled={savingScholarships.has(scholarship.id)}
+                          className={`px-4 py-2 rounded text-sm font-medium z-10 transition-colors ${
+                            savedScholarships.has(scholarship.id)
+                              ? 'bg-green-500 hover:bg-green-600 text-white'
+                              : 'bg-blue-500 hover:bg-blue-600 text-white'
+                          } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                          {scholarship.application_url ? 'Apply Now' : 'View Details'}
+                          {savingScholarships.has(scholarship.id) 
+                            ? 'Saving...' 
+                            : savedScholarships.has(scholarship.id) 
+                              ? 'Saved ✓' 
+                              : 'Save for later'
+                          }
                         </button>
-                      </div>                    </div>
+                      </div></div>
                   </div>
                   </Link>
                 </div>

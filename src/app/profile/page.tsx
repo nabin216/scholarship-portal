@@ -25,28 +25,7 @@ interface CountryOption {
   label: string;
 }
 
-interface SavedScholarship {
-  id: number;
-  scholarship: number;
-  scholarship_details: {
-    id: number;
-    title: string;
-    description: string;
-    deadline: string;
-    open_date?: string;
-    image?: string;
-    is_featured: boolean;
-    application_url?: string;
-    country?: string;
-    sponsor_types: string[];
-    fund_types: string[];
-    levels: string[];
-    fields_of_study: string[];
-    categories: string[];
-    language_requirements: string[];
-  };
-  date_saved: string;
-}
+
 
 const countryOptions: CountryOption[] = countryList.getData().map((country: { code: string; name: string }) => ({
   value: country.code,
@@ -69,11 +48,9 @@ const ProfilePage = () => {
     confirmPassword: '',
   });  const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [savedScholarships, setSavedScholarships] = useState<SavedScholarship[]>([]);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [loadingSaved, setLoadingSaved] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -82,12 +59,8 @@ const ProfilePage = () => {
         name: user.name || '',
         email: user.email || ''
       }));
-      
-      // Fetch additional user profile data
+        // Fetch additional user profile data
       fetchUserProfile();
-      
-      // Fetch saved scholarships
-      fetchSavedScholarships();
     }
   }, [user]);
   
@@ -124,32 +97,6 @@ const ProfilePage = () => {
       console.error('Error fetching profile:', error);
     }
   };
-
-  const fetchSavedScholarships = async () => {
-    setLoadingSaved(true);
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) return;
-
-      const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSavedScholarships(data);
-      } else {
-        console.error('Failed to fetch saved scholarships:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching saved scholarships:', error);
-    } finally {
-      setLoadingSaved(false);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -235,44 +182,13 @@ const ProfilePage = () => {
         const errorData = await response.json().catch(e => ({ detail: 'Could not parse error response' }));
         console.error('Error response:', errorData);
         throw new Error(errorData.detail || `Failed to update profile: ${response.status}`);
-      }
-        setMessage('Profile updated successfully');
+      }      setMessage('Profile updated successfully');
       setIsEditing(false);
       setPreviewImage(null); // Clear preview image after successful update
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while updating profile');
     } finally {
       setIsSaving(false);
-    }
-  };  const handleDeleteSavedScholarship = async (savedScholarshipId: number) => {
-    if (window.confirm('Are you sure you want to remove this scholarship from your saved list?')) {
-      setIsDeleting(true);
-      setError(null);
-      setMessage(null);
-      
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) throw new Error('Authentication token not found');
-        
-        const response = await fetch(`http://localhost:8000/api/user/saved-scholarships/${savedScholarshipId}/`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        });
-        
-        if (response.ok) {
-          setSavedScholarships(prev => prev.filter(item => item.id !== savedScholarshipId));
-          setMessage('Scholarship removed from saved list successfully');
-        } else {
-          throw new Error('Failed to remove scholarship from saved list');
-        }
-        
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred while removing the scholarship');
-      } finally {
-        setIsDeleting(false);
-      }
     }
   };
 
@@ -414,18 +330,13 @@ const ProfilePage = () => {
               >
                 change Password
               </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block py-4 px-4 text-sm font-medium ${
-                  activeTab === 'saved'
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
-                }`}
-                onClick={() => setActiveTab('saved')}
+            </li>            <li className="mr-2">
+              <Link
+                href="/profile/saved"
+                className={`inline-block py-4 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-300 transition-colors`}
               >
                 My Saved Scholarships
-              </button>
+              </Link>
             </li>
             <li className="mr-2">
               <button
@@ -761,128 +672,7 @@ const ProfilePage = () => {
                 </button>
               </div>
             </form>
-          </div>
-        )}        {/* Saved Scholarships Tab */}
-        {activeTab === 'saved' && (
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">My Saved Scholarships</h2>
-              <button
-                onClick={() => router.push('/scholarships/search')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Browse Scholarships
-              </button>
-            </div>
-            
-            {loadingSaved ? (
-              <div className="text-center py-10">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-sm text-gray-500">Loading saved scholarships...</p>
-              </div>
-            ) : savedScholarships.length > 0 ? (
-              <div className="space-y-4">
-                {savedScholarships.map(savedItem => (
-                  <div key={savedItem.id} className="border border-gray-200 rounded-lg p-4 hover:bg-blue-50 transition-colors">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium text-gray-800 mb-2">
-                          {savedItem.scholarship_details.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                          {savedItem.scholarship_details.description}
-                        </p>
-                        
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {savedItem.scholarship_details.levels.length > 0 && (
-                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                              {savedItem.scholarship_details.levels.join(', ')}
-                            </span>
-                          )}
-                          {savedItem.scholarship_details.categories.length > 0 && (
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                              {savedItem.scholarship_details.categories.join(', ')}
-                            </span>
-                          )}
-                          {savedItem.scholarship_details.country && (
-                            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
-                              {savedItem.scholarship_details.country}
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
-                          <span>Deadline: {new Date(savedItem.scholarship_details.deadline).toLocaleDateString()}</span>
-                          <span>Saved: {new Date(savedItem.date_saved).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex space-x-2 ml-4">
-                        <Link
-                          href={`/scholarships/scholarshipdetails?id=${savedItem.scholarship_details.id}`}
-                          className="p-2 text-blue-600 hover:bg-blue-100 rounded-full transition-colors"
-                          title="View Details"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                          </svg>
-                        </Link>
-                        
-                        {savedItem.scholarship_details.application_url && (
-                          <a
-                            href={savedItem.scholarship_details.application_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 text-green-600 hover:bg-green-100 rounded-full transition-colors"
-                            title="Apply Now"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                          </a>
-                        )}
-                        
-                        <button 
-                          onClick={() => handleDeleteSavedScholarship(savedItem.id)}
-                          disabled={isDeleting}
-                          className="p-2 text-red-600 hover:bg-red-100 rounded-full transition-colors disabled:opacity-50"
-                          title="Remove from Saved"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-10">
-                <svg className="mx-auto h-12 w-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No saved scholarships yet</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Start saving scholarships you're interested in to keep track of them here
-                </p>
-                <div className="mt-6">
-                  <button
-                    type="button"
-                    onClick={() => router.push('/scholarships/search')}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                    </svg>
-                    Browse Scholarships
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          </div>        )}
         
         {/* Applications Tab */}
         {activeTab === 'applications' && (
