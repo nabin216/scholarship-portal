@@ -172,13 +172,55 @@ export default function SavedScholarshipsPage() {
                   </svg>
                   Back to Profile
                 </Link>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-800">Saved Scholarships</h1>
+              </div>              <h1 className="text-3xl font-bold text-gray-800">Saved Scholarships</h1>
               <p className="text-gray-600 mt-2">Manage your bookmarked scholarships</p>
               {savedScholarships.length > 0 && (
-                <p className="text-sm text-gray-500 mt-1">
-                  {savedScholarships.length} scholarship{savedScholarships.length !== 1 ? 's' : ''} saved
-                </p>
+                <div className="mt-2 space-y-1">
+                  <p className="text-sm text-gray-500">
+                    {savedScholarships.length} scholarship{savedScholarships.length !== 1 ? 's' : ''} saved
+                  </p>
+                  {(() => {
+                    const now = new Date();
+                    const urgentCount = savedScholarships.filter(item => {
+                      if (!item.scholarship_details?.deadline) return false;
+                      const daysToDeadline = Math.ceil(
+                        (new Date(item.scholarship_details.deadline).getTime() - now.getTime()) / 
+                        (1000 * 60 * 60 * 24)
+                      );
+                      return daysToDeadline >= 0 && daysToDeadline <= 3;
+                    }).length;
+                    
+                    const expiredCount = savedScholarships.filter(item => {
+                      if (!item.scholarship_details?.deadline) return false;
+                      const daysToDeadline = Math.ceil(
+                        (new Date(item.scholarship_details.deadline).getTime() - now.getTime()) / 
+                        (1000 * 60 * 60 * 24)
+                      );
+                      return daysToDeadline < 0;
+                    }).length;
+
+                    return (
+                      <div className="flex items-center space-x-4 text-xs">
+                        {urgentCount > 0 && (
+                          <span className="flex items-center text-orange-600">
+                            <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {urgentCount} urgent deadline{urgentCount !== 1 ? 's' : ''}
+                          </span>
+                        )}
+                        {expiredCount > 0 && (
+                          <span className="flex items-center text-red-600">
+                            <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            {expiredCount} expired
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
+                </div>
               )}
             </div>
             <Link
@@ -212,9 +254,8 @@ export default function SavedScholarshipsPage() {
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Provider
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Deadline
+                    </th>                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Deadline Status
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Date Saved
@@ -236,13 +277,66 @@ export default function SavedScholarshipsPage() {
                         </tr>
                       );
                     }
-                    
-                    const daysToDeadline = Math.ceil(
+                      const daysToDeadline = Math.ceil(
                       (new Date(scholarshipDetails.deadline).getTime() - new Date().getTime()) / 
                       (1000 * 60 * 60 * 24)
                     );
+
+                    const getDeadlineStatus = () => {
+                      if (daysToDeadline < 0) {
+                        const daysOverdue = Math.abs(daysToDeadline);
+                        return {
+                          text: `Expired ${daysOverdue} day${daysOverdue === 1 ? '' : 's'} ago`,
+                          bgColor: 'bg-red-100',
+                          textColor: 'text-red-800',
+                          urgent: true
+                        };
+                      } else if (daysToDeadline === 0) {
+                        return {
+                          text: 'Due Today!',
+                          bgColor: 'bg-red-100',
+                          textColor: 'text-red-800',
+                          urgent: true
+                        };
+                      } else if (daysToDeadline === 1) {
+                        return {
+                          text: 'Due Tomorrow',
+                          bgColor: 'bg-orange-100',
+                          textColor: 'text-orange-800',
+                          urgent: true
+                        };
+                      } else if (daysToDeadline <= 3) {
+                        return {
+                          text: `${daysToDeadline} days left`,
+                          bgColor: 'bg-orange-100',
+                          textColor: 'text-orange-800',
+                          urgent: true
+                        };
+                      } else if (daysToDeadline <= 7) {
+                        return {
+                          text: `${daysToDeadline} days left`,
+                          bgColor: 'bg-yellow-100',
+                          textColor: 'text-yellow-800',
+                          urgent: false
+                        };
+                      } else if (daysToDeadline <= 30) {
+                        return {
+                          text: `${daysToDeadline} days left`,
+                          bgColor: 'bg-blue-100',
+                          textColor: 'text-blue-800',
+                          urgent: false
+                        };
+                      } else {
+                        return {
+                          text: `${daysToDeadline} days left`,
+                          bgColor: 'bg-green-100',
+                          textColor: 'text-green-800',
+                          urgent: false
+                        };
+                      }
+                    };                    const deadlineStatus = getDeadlineStatus();
                     
-                    return (                      <tr key={item.id} className="hover:bg-gray-50">
+                    return (                      <tr key={item.id} className={`hover:bg-gray-50 ${deadlineStatus.urgent ? 'bg-red-50 border-l-4 border-red-400' : ''}`}>
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">
                             <Link 
@@ -258,20 +352,20 @@ export default function SavedScholarshipsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-500">{scholarshipDetails.provider}</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900">
+                        </td>                        <td className="px-6 py-4">
+                          <div className="text-sm text-gray-900 mb-1">
                             {new Date(scholarshipDetails.deadline).toLocaleDateString()}
                           </div>
-                          {daysToDeadline > 0 && daysToDeadline <= 30 ? (
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                              {daysToDeadline} days left
+                          <div className="flex items-center space-x-1">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full ${deadlineStatus.bgColor} ${deadlineStatus.textColor}`}>
+                              {deadlineStatus.text}
                             </span>
-                          ) : daysToDeadline <= 0 ? (
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                              Expired
-                            </span>
-                          ) : null}
+                            {deadlineStatus.urgent && (
+                              <svg className="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="text-sm text-gray-500">

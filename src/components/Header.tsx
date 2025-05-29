@@ -21,7 +21,7 @@ const Header: React.FC = () => {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center space-x-8">
-                <Link href="/scholarships" className="text-gray-700 hover:text-primary-600 text-sm font-medium transition-colors">
+                <Link href="/scholarships/search" className="text-gray-700 hover:text-primary-600 text-sm font-medium transition-colors">
                     Scholarships
                 </Link>
                 <Link href="/admissions" className="text-gray-700 hover:text-primary-600 text-sm font-medium transition-colors">

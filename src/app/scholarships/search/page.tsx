@@ -305,8 +305,8 @@ const ScholarshipSearch = () => {
   return (    <div className="flex bg-gray-50 min-h-screen">
       <div className="w-full max-w-[95%] mx-auto px-2">
         <div className="py-4">
-          <Link href="/scholarships" className="text-blue-600 hover:text-blue-800">
-            &larr; Back to all scholarships
+          <Link href="/#" className="text-blue-600 hover:text-blue-800">
+            &larr; Back to Homepage
           </Link>
           {/* <h1 className="text-2xl font-bold mt-2 mb-6">Advanced Scholarship Search</h1> */}
         </div>
