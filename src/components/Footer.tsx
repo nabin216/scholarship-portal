@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
                             <Link href="/help-center" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Help Center</Link>
                             <Link href="/faq" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">FAQ</Link>
                             <Link href="/support-team" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Support Team</Link>
-                            <Link href="/how-to-works" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">How it Works</Link>
+                            <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">How it Works</Link>
                             <Link href="/get-in-touch" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Get in touch</Link>
                         </div>
                         
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
                             <span className="mx-2 text-gray-400">·</span>
                             <Link href="/support-team" className="text-gray-600 hover:text-gray-900 transition-colors">Support Team</Link>
                             <span className="mx-2 text-gray-400">·</span>
-                            <Link href="/how-to-works" className="text-gray-600 hover:text-gray-900 transition-colors">How it Works</Link>
+                            <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How it Works</Link>
                             <span className="mx-2 text-gray-400">·</span>
                             <Link href="/get-in-touch" className="text-gray-600 hover:text-gray-900 transition-colors">Get in touch</Link>
                         </div>
