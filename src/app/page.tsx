@@ -9,6 +9,7 @@ import {
   ArrowRightIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import Imagr1 from '../../public/images/undergraduate.png'
 
 const HomePage = () => {
     const features = [
@@ -84,28 +85,50 @@ const HomePage = () => {
                 <div className="container mx-auto px-4">
                     <h2 className="text-2xl font-semibold mb-8">Featured scholarships</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <div className="relative aspect-[4/3]">
-                            <img src="/images/scholarships/undergraduate.jpg" alt="Undergraduate" className="w-full h-full object-cover rounded-lg" />
-                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium rounded">
+                        <div className="relative aspect-[3/3.5]">
+                            <img src={Imagr1.src} alt="Undergraduate" className="w-full h-full object-cover" />
+                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium">
                                 Undergraduate
                             </div>
                         </div>
-                        <div className="relative aspect-[4/3]">
-                            <img src="/images/scholarships/masters.jpg" alt="Master's" className="w-full h-full object-cover rounded-lg" />
-                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium rounded">
-                                Master's
+                        
+                        {/* 2nd card split into two parts */}
+                        <div className="grid grid-rows-2 gap-3">
+                            <div className="relative aspect-[3/1.7]">
+                                                            <img src={Imagr1.src} alt="Undergraduate" className="w-full h-full object-cover" />
+
+                                <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium">
+                                    Master's
+                                </div>
+                            </div>
+                            <div className="relative aspect-[3/1.7]">
+                            <img src={Imagr1.src} alt="Undergraduate" className="w-full h-full object-cover" />
+                                <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium">
+                                    Research
+                                </div>
                             </div>
                         </div>
-                        <div className="relative aspect-[4/3]">
-                            <img src="/images/scholarships/phd.jpg" alt="PhD" className="w-full h-full object-cover rounded-lg" />
-                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium rounded">
+                        
+                        <div className="relative aspect-[3/3.5]">
+                            <img src={Imagr1.src} alt="PhD" className="w-full h-full object-cover" />
+                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium">
                                 PhD
                             </div>
                         </div>
-                        <div className="relative aspect-[4/3]">
-                            <img src="/images/scholarships/medical.jpg" alt="Medical" className="w-full h-full object-cover rounded-lg" />
-                            <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium rounded">
-                                Medical School
+                        
+                        {/* 4th card split into two parts */}
+                        <div className="grid grid-rows-2 gap-3">
+                            <div className="relative aspect-[3/1.7]">
+                                <img src="/images/scholarships/medical.jpg" alt="Medical" className="w-full h-full object-cover" />
+                                <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium">
+                                    Medical School
+                                </div>
+                            </div>
+                            <div className="relative aspect-[3/1.7]">
+                                <img src="/images/scholarships/engineering.jpg" alt="Engineering" className="w-full h-full object-cover" />
+                                <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium">
+                                    Engineering
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -201,43 +224,6 @@ const HomePage = () => {
                                 <p className="text-gray-600 leading-relaxed">
                                     {feature.description}
                                 </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Testimonials Section */}
-            <section className="py-20 bg-white">
-                <div className="container">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                            What Students Say
-                        </h2>
-                        <p className="text-xl text-gray-600">
-                            Hear from students who found their dream scholarships
-                        </p>
-                    </div>
-
-                    <div className="grid lg:grid-cols-3 gap-8">
-                        {testimonials.map((testimonial, index) => (
-                            <div key={index} className="bg-gray-50 rounded-xl p-8">
-                                <div className="flex mb-4">
-                                    {[...Array(testimonial.rating)].map((_, i) => (
-                                        <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                                    ))}
-                                </div>
-                                <p className="text-gray-700 mb-6 italic">
-                                    "{testimonial.content}"
-                                </p>
-                                <div>
-                                    <div className="font-semibold text-gray-900">
-                                        {testimonial.name}
-                                    </div>
-                                    <div className="text-gray-600 text-sm">
-                                        {testimonial.role}
-                                    </div>
-                                </div>
                             </div>
                         ))}
                     </div>
