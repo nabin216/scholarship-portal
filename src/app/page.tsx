@@ -61,7 +61,7 @@ const HomePage = () => {
               {/* Hero Section */}
             <section className="relative z-0 mx-4 md:mx-8 lg:mx-12">
                 <div className="relative bg-cover bg-center rounded-none py-16" style={{ 
-                    backgroundImage: 'url("/images/university.jpg")'
+                    backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0.5) 100%), url("/images/university.jpg")'
                 }}>
                     <div className="container mx-auto px-4">
                         <div className="text-center mb-16">
@@ -73,7 +73,8 @@ const HomePage = () => {
                             </p>
                         </div>
                     </div>
-                </div>                {/* Filter section - positioned to overlap the hero image */}
+                </div>                
+                {/* Filter section - positioned to overlap the hero image */}
                 <div className="relative z-10 -mt-12 max-w-4xl mx-auto px-4">
                     {/* Using the HomeSearchFilter component which handles the navigation */}
                     <HomeSearchFilter />
