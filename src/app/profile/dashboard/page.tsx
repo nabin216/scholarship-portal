@@ -1,53 +1,21 @@
-// "use client";
+"use client";
 
-// import React, { useEffect, useState } from 'react';
-// import { useAuth } from '../Authentication/context/AuthContext';
-// import Link from 'next/link';
+import React from 'react';
 
-// interface Scholarship {
-//   id: number;
-//   title: string;
-//   provider: string;
-//   amount: number;
-//   deadline: string;
-// }
+const UserDashboard = () => {
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+        <div className="bg-white rounded-lg shadow p-6">
+          <p className="text-gray-600">Dashboard functionality is under development.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// interface SavedScholarship {
-//   id: number;
-//   scholarship: Scholarship;
-//   date_saved: string;
-// }
-
-// const UserDashboard = () => {
-//   const { user } = useAuth();
-//   const [savedScholarships, setSavedScholarships] = useState<SavedScholarship[]>([]);
-//   const [recentApplications, setRecentApplications] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const fetchUserData = async () => {
-//       setLoading(true);
-//       setError(null);
-      
-//       try {
-//         const token = localStorage.getItem('authToken');
-//         if (!token) return;
-        
-//         // Fetch saved scholarships
-//         const savedResponse = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
-//           headers: {
-//             'Authorization': `Token ${token}`,
-//           }
-//         });
-        
-//         if (savedResponse.ok) {
-//           const savedData = await savedResponse.json();
-//           setSavedScholarships(savedData);
-//         }
-        
-//         // Fetch recent applications
-//         // This would be implemented when the backend endpoint is available
+export default UserDashboard;
         
 //       } catch (error) {
 //         console.error('Error fetching data:', error);

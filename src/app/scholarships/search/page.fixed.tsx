@@ -579,7 +579,7 @@ const ScholarshipSearch = () => {
                           {/* Country tag */}
                           <div className="absolute top-2 right-2 z-10">
                             <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
-                              📍 {scholarship.country_detail?.name || scholarship.country_name}
+                            ✈ {scholarship.country_detail?.name || scholarship.country_name}
                             </span>
                           </div>
 

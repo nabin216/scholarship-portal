@@ -51,11 +51,12 @@ const ScholarshipSearch = () => {
       }
     }
   }, [searchParams]);
-
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isDropdownOpen) {
+      const target = event.target as HTMLElement;
+      // Don't close if clicking on the dropdown or its children
+      if (isDropdownOpen && !target.closest('.sort-dropdown')) {
         setIsDropdownOpen(false);
       }
     };
@@ -256,23 +257,32 @@ const ScholarshipSearch = () => {
       deadline_before: '',
       language_requirement: ''
     });
-  };
-
-  const handleSort = (field: SortConfig['field']) => {
-    setSortConfig(prev => ({
-      field,
-      direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
-    }));
+  };  const handleSort = (field: SortConfig['field']) => {
+    console.log('Sort clicked:', field); // Debug log
+    setSortConfig(prev => {
+      const newDirection: 'asc' | 'desc' = prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc';
+      const newConfig = {
+        field,
+        direction: newDirection
+      };
+      console.log('New sort config:', newConfig); // Debug log
+      return newConfig;
+    });
     setIsDropdownOpen(false);
   };
-
   const sortScholarships = (scholarships: Scholarship[]) => {
+    console.log('Sorting scholarships:', { 
+      count: scholarships.length, 
+      sortConfig,
+      sampleTitles: scholarships.slice(0, 3).map(s => s.title)
+    });
+    
     return [...scholarships].sort((a, b) => {
       switch (sortConfig.field) {
         case 'deadline':
-          return sortConfig.direction === 'asc' 
-            ? new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-            : new Date(b.deadline).getTime() - new Date(a.deadline).getTime();
+          const deadlineA = new Date(a.deadline).getTime();
+          const deadlineB = new Date(b.deadline).getTime();
+          return sortConfig.direction === 'asc' ? deadlineA - deadlineB : deadlineB - deadlineA;
         case 'title':
           return sortConfig.direction === 'asc' 
             ? a.title.localeCompare(b.title)
@@ -496,55 +506,111 @@ const ScholarshipSearch = () => {
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     {loading ? 'Loading...' : `${scholarships.length} scholarships found`}
                   </p>
-                </div>
-
-                {/* Sort Dropdown */}
-                <div className="relative w-full sm:w-auto">
+                </div>                {/* Sort Dropdown */}
+                <div className="relative w-full sm:w-auto sort-dropdown">
                   <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    onClick={() => {
+                      console.log('Sort dropdown clicked, current state:', isDropdownOpen);
+                      setIsDropdownOpen(!isDropdownOpen);
+                    }}
                     className="w-full sm:w-auto bg-gray-100 border border-gray-300 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between gap-2"
                   >
                     <span>Sort by: {sortConfig.field.replace('_', ' ')} ({sortConfig.direction})</span>
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 flex-shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
 
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-full sm:w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                    <div className="absolute right-0 mt-2 w-full sm:w-48 bg-white rounded-md shadow-lg z-20 border border-gray-200">
                       <div className="py-1">
                         {(['deadline', 'title', 'country', 'created_at'] as const).map((field) => (
                           <button
                             key={field}
-                            onClick={() => handleSort(field)}
-                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              console.log('Sort option clicked:', field);
+                              handleSort(field);
+                            }}
+                            className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
+                              sortConfig.field === field 
+                                ? 'bg-blue-50 text-blue-700 font-medium' 
+                                : 'text-gray-700 hover:bg-gray-100'
+                            }`}
                           >
                             {field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
+                            {sortConfig.field === field && (
+                              <span className="ml-2">
+                                {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                              </span>
+                            )}
                           </button>
                         ))}
                       </div>
                     </div>
                   )}
                 </div>
-              </div>
-
-              {/* Active Filters */}
+              </div>              {/* Active Filters */}
               {activeFiltersCount > 0 && (
                 <div className="mt-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-sm font-medium text-gray-700">Active Filters:</span>
+                    <button
+                      onClick={clearAllFilters}
+                      className="text-xs text-red-600 hover:text-red-800 transition-colors font-medium"
+                    >
+                      Clear All ({activeFiltersCount})
+                    </button>
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    {Object.entries(filters).map(([key, value]) =>
-                      value ? (
-                        <div key={key} className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                          <span>{key.replace('_', ' ')}: {value}</span>
+                    {Object.entries(filters).map(([key, value]) => {
+                      if (!value) return null;
+                      
+                      // Create better display labels for filter keys
+                      const getFilterLabel = (filterKey: string) => {
+                        const labelMap: Record<string, string> = {
+                          'levels': 'Level',
+                          'country': 'Country',
+                          'field_of_study': 'Field of Study',
+                          'fund_type': 'Fund Type',
+                          'sponsor_type': 'Sponsor Type',
+                          'scholarship_category': 'Category',
+                          'deadline_before': 'Deadline Before',
+                          'language_requirement': 'Language Requirement'
+                        };
+                        return labelMap[filterKey] || filterKey.replace('_', ' ');
+                      };
+
+                      // Format the date value for deadline_before
+                      const formatValue = (filterKey: string, filterValue: string) => {
+                        if (filterKey === 'deadline_before' && filterValue) {
+                          try {
+                            return new Date(filterValue).toLocaleDateString();
+                          } catch {
+                            return filterValue;
+                          }
+                        }
+                        return filterValue;
+                      };
+
+                      return (
+                        <div
+                          key={key}
+                          className="bg-blue-50 text-blue-800 px-3 py-1.5 rounded-full text-sm flex items-center gap-2 border border-blue-200 hover:bg-blue-100 transition-colors"
+                        >
+                          <span className="font-medium">{getFilterLabel(key)}:</span>
+                          <span>{formatValue(key, value)}</span>
                           <button
                             onClick={() => handleFilterChange(key as keyof Filters, '')}
-                            className="hover:text-blue-600"
+                            className="hover:text-blue-600 hover:bg-blue-200 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold transition-colors"
+                            title={`Remove ${getFilterLabel(key)} filter`}
                           >
                             ×
                           </button>
                         </div>
-                      ) : null
-                    )}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -579,7 +645,7 @@ const ScholarshipSearch = () => {
                           {/* Country tag */}
                           <div className="absolute top-2 right-2 z-10">
                             <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
-                              📍 {scholarship.country_detail?.name || scholarship.country_name}
+                              ✈ {scholarship.country_detail?.name || scholarship.country_name}
                             </span>
                           </div>
 
@@ -749,17 +815,15 @@ const ScholarshipSearch = () => {
                             </Link>
                             
                             {/* Desktop save button in its own section */}
-                            <div className="px-4 pb-3 pt-1">
+                            <div className="px-4 pb-4 pt-0 flex justify-end">
                               <button
                                 onClick={() => handleSaveScholarship(scholarship.id)}
-                                disabled={savingScholarships.has(scholarship.id)}
-                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors self-end float-right ${
+                                disabled={savingScholarships.has(scholarship.id)}                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors self-end float-right ${
                                   savedScholarships.has(scholarship.id)
                                     ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
                                     : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
                                 } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              >
-                                {savingScholarships.has(scholarship.id) 
+                              >                                {savingScholarships.has(scholarship.id) 
                                   ? 'Saving...' 
                                   : savedScholarships.has(scholarship.id) 
                                     ? '✓ Saved' 
