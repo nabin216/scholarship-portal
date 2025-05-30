@@ -305,48 +305,7 @@ const ProfilePage = () => {
       <div className="container mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">My Profile</h1>
         
-        {/* Tabs */}        <div className="mb-6 border-b border-gray-200">
-          <ul className="flex flex-wrap -mb-px">
-            <li className="mr-2">
-              <button
-                className={`inline-block py-4 px-4 text-sm font-medium ${
-                  activeTab === 'personal'
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
-                }`}
-                onClick={() => setActiveTab('personal')}
-              >
-                Personal Information
-              </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block py-4 px-4 text-sm font-medium ${
-                  activeTab === 'security'
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent'
-                }`}
-                onClick={() => setActiveTab('security')}
-              >
-                change Password
-              </button>
-            </li>            <li className="mr-2">
-              <Link
-                href="/profile/saved"
-                className={`inline-block py-4 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-300 transition-colors`}
-              >
-                My Saved Scholarships
-              </Link>
-            </li>            <li className="mr-2">
-              <Link
-                href="/profile/applications"
-                className={`inline-block py-4 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-300 transition-colors`}
-              >
-                My Applications
-              </Link>
-            </li>
-          </ul>
-        </div>
+        
         
         {/* Error and Success Messages */}
         {error && (
@@ -378,10 +337,9 @@ const ProfilePage = () => {
             </div>
           </div>
         )}
-        
-        {/* Personal Information Tab */}
+          {/* Personal Information Tab */}
         {activeTab === 'personal' && (
-          <div className="bg-white shadow-md rounded-lg p-6">
+          <div className="bg-white shadow-md rounded-lg p-6 max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-gray-800">Personal Information</h2>              {!isEditing ? (
                 <button
@@ -447,10 +405,9 @@ const ProfilePage = () => {
                 </div>
               )}
             </div>
-            
-            <form onSubmit={handleSavePersonalInfo}>
-              <div className="space-y-6">
-                <div>
+              <form onSubmit={handleSavePersonalInfo}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                     Full Name
                   </label>
@@ -467,7 +424,7 @@ const ProfilePage = () => {
                   />
                 </div>
                 
-                <div>
+                <div className="md:col-span-2">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address
                   </label>
@@ -482,7 +439,7 @@ const ProfilePage = () => {
                   <p className="mt-1 text-xs text-gray-500">Email address cannot be changed.</p>
                 </div>
                 
-                <div>
+                <div className="md:col-span-2">
                   <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
                     Bio
                   </label>
@@ -498,7 +455,8 @@ const ProfilePage = () => {
                     } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                   />
                 </div>
-                  <div>
+                  
+                <div>
                   <label htmlFor="education" className="block text-sm font-medium text-gray-700 mb-1">
                     Education Level
                   </label>
@@ -538,7 +496,8 @@ const ProfilePage = () => {
                     } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
                   />
                 </div>
-                  <div>
+                  
+                <div>
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
                     Country
                   </label>
@@ -584,13 +543,12 @@ const ProfilePage = () => {
                   />
                 </div>
               </div>
-              
-              {isEditing && (
-                <div className="mt-6">
+                {isEditing && (
+                <div className="mt-6 flex justify-end">
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className={`w-full px-4 py-2 ${
+                    className={`px-8 py-2 ${
                       isSaving ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
                     } text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
                   >
@@ -601,10 +559,9 @@ const ProfilePage = () => {
             </form>
           </div>
         )}
-        
-        {/* Security Tab */}
+          {/* Security Tab */}
         {activeTab === 'security' && (
-          <div className="bg-white shadow-md rounded-lg p-6">
+          <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Change Password</h2>
             
             <form onSubmit={handleChangePassword}>
@@ -655,11 +612,11 @@ const ProfilePage = () => {
                 </div>
               </div>
               
-              <div className="mt-6">
+              <div className="mt-6 flex justify-end">
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className={`w-full px-4 py-2 ${
+                  className={`px-8 py-2 ${
                     isSaving ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
                   } text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
@@ -667,7 +624,8 @@ const ProfilePage = () => {
                 </button>
               </div>
             </form>
-          </div>        )}
+          </div>
+        )}
         </div>
     </div>
   );

@@ -136,20 +136,18 @@ const ChangePasswordPage = () => {
       setIsSaving(false);
     }
   };
-  
-  return (
+    return (
     <div className="p-8">
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-4 mb-6 max-w-xl mx-auto">
         <div className="p-2 bg-blue-100 rounded-lg">
           <KeyIcon className="h-6 w-6 text-blue-700" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Change Password</h1>
           <p className="mt-1 text-sm text-gray-600">Update your account password</p>
-        </div>
-      </div>
+        </div>      </div>
 
-      <div className="mt-6 max-w-xl">
+      <div className="mt-6 max-w-xl mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="shadow sm:rounded-md sm:overflow-hidden">
             <div className="px-4 py-5 bg-white space-y-6 sm:p-6">

@@ -37,6 +37,7 @@ export interface Scholarship {
   id: number;
   title: string;
   description: string;
+  requirements?: string;
   provider: string;
   amount: string;
   deadline: string;

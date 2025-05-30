@@ -141,11 +141,10 @@ const FeaturedProviders = () => {
           <div className="p-4 text-red-600">Error: {error}</div>
         ) : !Array.isArray(providers) || providers.length === 0 ? (
           <div className="p-4 text-gray-500">No featured scholarships available</div>        ) : (
-          providers.map(provider => (
-            <div 
+          providers.map(provider => (            <div 
               key={provider.id} 
               className="min-w-[240px] w-[240px] h-[290px] flex-shrink-0 bg-white p-6 rounded-lg text-center hover:shadow-lg transition-all duration-200 flex flex-col cursor-pointer transform hover:scale-105"
-              onClick={() => window.location.href = `/scholarships/${provider.id}`}
+              onClick={() => window.location.href = `/scholarships/scholarshipdetails?id=${provider.id}`}
             >
               <div className="mb-4 flex-shrink-0">
                 <img 
