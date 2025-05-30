@@ -614,8 +614,8 @@ const ScholarshipDetails = () => {
                   disabled={saving}
                   className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base ${
                     isSaved
-                      ? 'bg-green-600 hover:bg-green-700 text-white'
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                      ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                      : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
                   } ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {saving ? 'Saving...' : isSaved ? '✓ Saved' : '💾 Save for Later'}

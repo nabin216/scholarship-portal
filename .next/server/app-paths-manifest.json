@@ -1,7 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/scholarships/scholarshipdetails/page": "app/scholarships/scholarshipdetails/page.js",
-  "/scholarships/search/page": "app/scholarships/search/page.js",
-  "/profile/saved/page": "app/profile/saved/page.js",
-  "/Authentication/login/page": "app/Authentication/login/page.js"
+  "/scholarships/search/page": "app/scholarships/search/page.js"
 }

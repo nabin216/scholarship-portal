@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Scholarship, Filters, SortConfig } from '../../../types/scholarship';
+import { FilterOptions } from '../../../types/filterOptions';
 import Link from 'next/link';
 import { useAuth } from '../../Authentication/context/AuthContext';
 
@@ -10,10 +11,11 @@ const ScholarshipSearch = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
-  
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
+  const [filterOptionsLoading, setFilterOptionsLoading] = useState(true);
   const [filters, setFilters] = useState<Filters>({
     levels: '',
     country: '',
@@ -61,8 +63,34 @@ const ScholarshipSearch = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
+    };  
   }, [isDropdownOpen]);
+
+  // Fetch filter options from backend
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        setFilterOptionsLoading(true);
+        const response = await fetch('http://localhost:8000/api/scholarships/filter-options/');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Filter options data:', data);
+        setFilterOptions(data);
+        
+      } catch (error) {
+        console.error('Error fetching filter options:', error);
+        // Keep filter options as null on error, components will handle gracefully
+      } finally {
+        setFilterOptionsLoading(false);
+      }
+    };
+
+    fetchFilterOptions();
+  }, []);
 
   // Fetch scholarships based on filters
   useEffect(() => {
@@ -119,7 +147,7 @@ const ScholarshipSearch = () => {
             'Authorization': `Bearer ${token}`,
           }
         });
-          if (response.ok) {
+        if (response.ok) {
           const data = await response.json();
           const savedIds = new Set<number>(
             (data.results || data).map((saved: any) => saved.scholarship as number)
@@ -301,7 +329,9 @@ const ScholarshipSearch = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-          </div>          {/* Filter Sidebar */}
+          </div>
+          
+          {/* Filter Sidebar */}
           <div className={`${mobileFiltersOpen ? 'fixed inset-y-0 left-0 z-50 w-full max-w-sm' : 'hidden'} lg:block lg:relative lg:z-auto lg:w-1/4 lg:max-w-none`}>
             <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 lg:sticky lg:top-6 h-full lg:h-auto overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
@@ -337,21 +367,17 @@ const ScholarshipSearch = () => {
                     value={filters.country}
                     onChange={(e) => handleFilterChange('country', e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={filterOptionsLoading}
                   >
                     <option value="">All Countries</option>
-                    <option value="USA">USA</option>
-                    <option value="Canada">Canada</option>
-                    <option value="UK">UK</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Germany">Germany</option>
-                    <option value="France">France</option>
-                    <option value="Netherlands">Netherlands</option>
-                    <option value="Sweden">Sweden</option>
-                    <option value="Japan">Japan</option>
-                    <option value="South Korea">South Korea</option>
+                    {filterOptions?.countries.map((country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
+                
                 {/* Level Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -361,17 +387,17 @@ const ScholarshipSearch = () => {
                     value={filters.levels}
                     onChange={(e) => handleFilterChange('levels', e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={filterOptionsLoading}
                   >
                     <option value="">All Levels</option>
-                    <option value="Undergraduate">Undergraduate</option>
-                    <option value="Graduate">Graduate</option>
-                    <option value="Master's">Master's</option>
-                    <option value="PhD">PhD</option>
-                    <option value="Postgraduate">Postgraduate</option>
-                    <option value="Postdoctoral">Postdoctoral</option>
+                    {filterOptions?.levels.map((level) => (
+                      <option key={level.id} value={level.name}>
+                        {level.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
+                
                 {/* Field of Study Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -381,21 +407,17 @@ const ScholarshipSearch = () => {
                     value={filters.field_of_study}
                     onChange={(e) => handleFilterChange('field_of_study', e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={filterOptionsLoading}
                   >
                     <option value="">All Fields</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Medicine">Medicine</option>
-                    <option value="Business">Business</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Arts">Arts</option>
-                    <option value="Science">Science</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Social Sciences">Social Sciences</option>
-                    <option value="Humanities">Humanities</option>
-                    <option value="Law">Law</option>
+                    {filterOptions?.fields_of_study.map((field) => (
+                      <option key={field.id} value={field.name}>
+                        {field.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
+                
                 {/* Fund Type Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -405,15 +427,17 @@ const ScholarshipSearch = () => {
                     value={filters.fund_type}
                     onChange={(e) => handleFilterChange('fund_type', e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={filterOptionsLoading}
                   >
                     <option value="">All Fund Types</option>
-                    <option value="Full Funding">Full Funding</option>
-                    <option value="Partial Funding">Partial Funding</option>
-                    <option value="Tuition Only">Tuition Only</option>
-                    <option value="Living Allowance">Living Allowance</option>
+                    {filterOptions?.fund_types.map((fundType) => (
+                      <option key={fundType.id} value={fundType.name}>
+                        {fundType.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
+                
                 {/* Scholarship Category Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -423,13 +447,14 @@ const ScholarshipSearch = () => {
                     value={filters.scholarship_category}
                     onChange={(e) => handleFilterChange('scholarship_category', e.target.value)}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    disabled={filterOptionsLoading}
                   >
                     <option value="">All Categories</option>
-                    <option value="Merit-based">Merit-based</option>
-                    <option value="Need-based">Need-based</option>
-                    <option value="Research">Research</option>
-                    <option value="Athletic">Athletic</option>
-                    <option value="Minority">Minority</option>
+                    {filterOptions?.categories.map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -462,7 +487,8 @@ const ScholarshipSearch = () => {
           {/* Main Content */}
           <div className="flex-1">
             {/* Header with Sort */}
-            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Search Scholarships
@@ -537,108 +563,119 @@ const ScholarshipSearch = () => {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <p className="text-red-800">{error}</p>
               </div>
-            )}            
+            )}
+            
             {/* Scholarship Cards */}
             {!loading && !error && (
               <div className="space-y-4">
                 {sortedScholarships.length > 0 ? (
                   sortedScholarships.map((scholarship) => (
                     <div key={scholarship.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-                      <Link 
-                        href={scholarship.application_url || `/scholarships/scholarshipdetails?id=${scholarship.id}`}
-                        target={scholarship.application_url ? "_blank" : "_self"}
-                        className="block"
-                      >                        {/* Mobile Layout */}
-                        <div className="block sm:hidden relative">
-                          {/* Country in top right corner */}
+                      
+                      {/* Mobile Layout */}
+                      <div className="block sm:hidden">
+                        {/* Content section */}
+                        <div className="relative pt-2 pb-2">
+                          {/* Country tag */}
                           <div className="absolute top-2 right-2 z-10">
                             <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap">
                               📍 {scholarship.country_detail?.name || scholarship.country_name}
                             </span>
                           </div>
 
-                          <div className="flex pb-3 pr-3">
-                            {/* Left side 1:1 image - larger with no margins or radius */}
-                            <div className="w-24 h-24 bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                              {scholarship.image ? (
-                                <img 
-                                  src={scholarship.image} 
-                                  alt={scholarship.title}
-                                  className="h-full w-full object-cover"
-                                />
-                              ) : (
-                                <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                                  <span className="text-gray-500 text-xs">No Image</span>
+                          {/* Scholarship content */}
+                          <Link 
+                            href={scholarship.application_url || `/scholarships/scholarshipdetails?id=${scholarship.id}`}
+                            target={scholarship.application_url ? "_blank" : "_self"}
+                            className="block"
+                          >
+                            <div className="flex pb-3 pr-3 pt-2 pl-3">
+                              {/* Left side image */}
+                              <div className="w-24 h-24 bg-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                {scholarship.image ? (
+                                  <img 
+                                    src={scholarship.image} 
+                                    alt={scholarship.title}
+                                    className="h-full w-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                                    <span className="text-gray-500 text-xs">No Image</span>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Right side details */}
+                              <div className="flex-1 min-w-0 ml-3">
+                                {/* Fund type and sponsor tags */}
+                                <div className="flex flex-wrap gap-1 mb-2 mt-6">
+                                  {scholarship.fund_type.slice(0, 1).map((type) => (
+                                    <span key={type.id} className="bg-green-100 text-green-800 text-xs px-1.5 py-0.5 rounded">
+                                      {type.name}
+                                    </span>
+                                  ))}
+                                  {scholarship.sponsor_type.slice(0, 1).map((sponsor) => (
+                                    <span key={sponsor.id} className="bg-purple-100 text-purple-800 text-xs px-1.5 py-0.5 rounded">
+                                      {sponsor.name}
+                                    </span>
+                                  ))}
                                 </div>
-                              )}
-                            </div>                            {/* Right side details */}
-                            <div className="flex-1 min-w-0 ml-3">
-                              {/* Fund type and sponsor tags */}
-                              <div className="flex flex-wrap gap-1 mb-2 mt-6">
-                                {scholarship.fund_type.slice(0, 1).map((type) => (
-                                  <span key={type.id} className="bg-green-100 text-green-800 text-xs px-1.5 py-0.5 rounded">
-                                    {type.name}
+
+                                {/* Provider */}
+                                <p className="text-gray-600 text-xs font-medium truncate mb-2">{scholarship.provider}</p>
+
+                                {/* Deadline */}
+                                <div className="text-xs text-gray-600">
+                                  <span className="font-medium">Deadline:</span>{' '}
+                                  <span className="text-red-600 font-semibold">
+                                    {new Date(scholarship.deadline).toLocaleDateString()}
                                   </span>
-                                ))}
-                                {scholarship.sponsor_type.slice(0, 1).map((sponsor) => (
-                                  <span key={sponsor.id} className="bg-purple-100 text-purple-800 text-xs px-1.5 py-0.5 rounded">
-                                    {sponsor.name}
-                                  </span>
-                                ))}
+                                </div>
                               </div>
-
-                              {/* Provider */}
-                              <p className="text-gray-600 text-xs font-medium truncate mb-2">{scholarship.provider}</p>
-
-                              {/* Deadline */}
+                            </div>
+                          
+                            {/* Title and levels */}
+                            <div className="px-3 pb-3 space-y-1">
+                              {/* Title */}
+                              <h3 className="text-sm font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                                {scholarship.title}
+                              </h3>
+                              
+                              {/* Levels */}
                               <div className="text-xs text-gray-600">
-                                <span className="font-medium">Deadline:</span>{' '}
-                                <span className="text-red-600 font-semibold">
-                                  {new Date(scholarship.deadline).toLocaleDateString()}
-                                </span>
+                                <div>
+                                  <span className="font-medium">Levels:</span>{' '}
+                                  {scholarship.levels.map((l) => l.name).join(', ')}
+                                </div>
                               </div>
                             </div>
-                          </div>                          {/* Save button in bottom right corner */}
-                          <div className="absolute bottom-2 right-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                handleSaveScholarship(scholarship.id);
-                              }}
-                              disabled={savingScholarships.has(scholarship.id)}
-                              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                                savedScholarships.has(scholarship.id)
-                                  ? 'bg-green-500 hover:bg-green-600 text-white'
-                                  : 'bg-blue-500 hover:bg-blue-600 text-white'
-                              } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            >
-                              {savingScholarships.has(scholarship.id) 
-                                ? 'Saving...' 
-                                : savedScholarships.has(scholarship.id) 
-                                  ? '✓ Saved' 
-                                  : '💾 Save'
-                              }
-                            </button>
-                          </div>                          {/* Bottom section with title and levels */}
-                          <div className="px-3 pb-3 space-y-1">
-                            {/* Title */}
-                            <h3 className="text-sm font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
-                              {scholarship.title}
-                            </h3>
-                            
-                            {/* Levels */}
-                            <div className="text-xs text-gray-600">
-                              <div>
-                                <span className="font-medium">Levels:</span>{' '}
-                                {scholarship.levels.map((l) => l.name).join(', ')}
-                              </div>
-                            </div>
-                          </div>
+                          </Link>
                         </div>
+                        
+                        {/* Separate save button */}
+                        <div className="px-3 pb-3">
+                          <button
+                            onClick={() => handleSaveScholarship(scholarship.id)}
+                            disabled={savingScholarships.has(scholarship.id)}
+                            className={`w-full py-2 rounded-md text-sm font-medium transition-colors ${
+                              savedScholarships.has(scholarship.id)
+                                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                                : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                            } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          >
+                            {savingScholarships.has(scholarship.id) 
+                              ? 'Saving...' 
+                              : savedScholarships.has(scholarship.id) 
+                                ? '✓ Saved' 
+                                : '💾 Save'
+                            }
+                          </button>
+                        </div>
+                      </div>
 
-                        {/* Desktop Layout */}
-                        <div className="hidden sm:flex sm:h-48">
+                      {/* Desktop Layout */}
+                      <div className="hidden sm:block">
+                        <div className="flex h-48">
                           {/* Scholarship Image */}
                           <div className="w-48 h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
                             {scholarship.image ? (
@@ -654,82 +691,85 @@ const ScholarshipSearch = () => {
                             )}
                           </div>
                           
-                          {/* Scholarship Details */}
-                          <div className="flex-1 p-4">
-                            <div className="flex flex-col space-y-2">
-                              {/* Header with title and country */}
-                              <div className="flex items-start justify-between gap-2">
-                                <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
-                                  {scholarship.title}
-                                </h3>
-                                <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
-                                  📍 {scholarship.country_detail?.name || scholarship.country_name}
-                                </span>
-                              </div>
-                              
-                              {/* Provider */}
-                              <p className="text-gray-600 text-sm font-medium">{scholarship.provider}</p>
-                              
-                              {/* Tags */}
-                              <div className="flex flex-wrap gap-1.5">
-                                {scholarship.fund_type.slice(0, 2).map((type) => (
-                                  <span key={type.id} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                                    {type.name}
-                                  </span>
-                                ))}
-                                {scholarship.sponsor_type.slice(0, 1).map((sponsor) => (
-                                  <span key={sponsor.id} className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
-                                    {sponsor.name}
-                                  </span>
-                                ))}
-                                {scholarship.fund_type.length > 2 && (
-                                  <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                                    +{scholarship.fund_type.length - 2} more
-                                  </span>
-                                )}
-                              </div>
-                              
-                              {/* Details Grid */}
-                              <div className="grid grid-cols-1 gap-2 text-sm text-gray-600">
-                                <div>
-                                  <span className="font-medium">Levels:</span>{' '}
-                                  {scholarship.levels.map((l) => l.name).join(', ')}
-                                </div>
-                                <div>
-                                  <span className="font-medium">Deadline:</span>{' '}
-                                  <span className="text-red-600 font-semibold">
-                                    {new Date(scholarship.deadline).toLocaleDateString()}
+                          {/* Content Area */}
+                          <div className="flex-1 flex flex-col">
+                            {/* Link to scholarship details */}
+                            <Link 
+                              href={scholarship.application_url || `/scholarships/scholarshipdetails?id=${scholarship.id}`}
+                              target={scholarship.application_url ? "_blank" : "_self"}
+                              className="flex-1 p-4"
+                            >
+                              <div className="flex flex-col space-y-2">
+                                {/* Header with title and country */}
+                                <div className="flex items-start justify-between gap-2">
+                                  <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors line-clamp-2">
+                                    {scholarship.title}
+                                  </h3>
+                                  <span className="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
+                                    📍 {scholarship.country_detail?.name || scholarship.country_name}
                                   </span>
                                 </div>
-                              </div>{/* Bottom row with save button */}
-                              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-1">
-                                <div className="flex-1"></div>
                                 
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    handleSaveScholarship(scholarship.id);
-                                  }}
-                                  disabled={savingScholarships.has(scholarship.id)}
-                                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap self-end sm:self-auto ${
-                                    savedScholarships.has(scholarship.id)
-                                      ? 'bg-green-500 hover:bg-green-600 text-white'
-                                      : 'bg-blue-500 hover:bg-blue-600 text-white'
-                                  } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                >
-                                  {savingScholarships.has(scholarship.id) 
-                                    ? 'Saving...' 
-                                    : savedScholarships.has(scholarship.id) 
-                                      ? '✓ Saved' 
-                                      : '💾 Save'
-                                  }
-                                </button>
+                                {/* Provider */}
+                                <p className="text-gray-600 text-sm font-medium">{scholarship.provider}</p>
+                                
+                                {/* Tags */}
+                                <div className="flex flex-wrap gap-1.5">
+                                  {scholarship.fund_type.slice(0, 2).map((type) => (
+                                    <span key={type.id} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                                      {type.name}
+                                    </span>
+                                  ))}
+                                  {scholarship.sponsor_type.slice(0, 1).map((sponsor) => (
+                                    <span key={sponsor.id} className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">
+                                      {sponsor.name}
+                                    </span>
+                                  ))}
+                                  {scholarship.fund_type.length > 2 && (
+                                    <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                                      +{scholarship.fund_type.length - 2} more
+                                    </span>
+                                  )}
+                                </div>
+                                
+                                {/* Details Grid */}
+                                <div className="grid grid-cols-1 gap-2 text-sm text-gray-600">
+                                  <div>
+                                    <span className="font-medium">Levels:</span>{' '}
+                                    {scholarship.levels.map((l) => l.name).join(', ')}
+                                  </div>
+                                  <div>
+                                    <span className="font-medium">Deadline:</span>{' '}
+                                    <span className="text-red-600 font-semibold">
+                                      {new Date(scholarship.deadline).toLocaleDateString()}
+                                    </span>
+                                  </div>
+                                </div>
                               </div>
+                            </Link>
+                            
+                            {/* Desktop save button in its own section */}
+                            <div className="px-4 pb-3 pt-1">
+                              <button
+                                onClick={() => handleSaveScholarship(scholarship.id)}
+                                disabled={savingScholarships.has(scholarship.id)}
+                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors self-end float-right ${
+                                  savedScholarships.has(scholarship.id)
+                                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                                    : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                                } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              >
+                                {savingScholarships.has(scholarship.id) 
+                                  ? 'Saving...' 
+                                  : savedScholarships.has(scholarship.id) 
+                                    ? '✓ Saved' 
+                                    : '💾 Save'
+                                }
+                              </button>
                             </div>
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </div>
                   ))
                 ) : (

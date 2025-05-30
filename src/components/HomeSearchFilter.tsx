@@ -1,17 +1,45 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { FilterOptions } from '../types/filterOptions';
 
 const HomeSearchFilter = () => {
     const router = useRouter();
+    const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
+    const [filterOptionsLoading, setFilterOptionsLoading] = useState(true);
     const [filterValues, setFilterValues] = useState({
         level: '',
         country: '',
         field: '',
         deadline: ''
     });
+
+    // Fetch filter options from backend
+    useEffect(() => {
+        const fetchFilterOptions = async () => {
+            try {
+                setFilterOptionsLoading(true);
+                const response = await fetch('http://localhost:8000/api/scholarships/filter-options/');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                setFilterOptions(data);
+                
+            } catch (error) {
+                console.error('Error fetching filter options:', error);
+                // Keep filter options as null on error, components will handle gracefully
+            } finally {
+                setFilterOptionsLoading(false);
+            }
+        };
+
+        fetchFilterOptions();
+    }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -44,55 +72,50 @@ const HomeSearchFilter = () => {
 
     return (
         <div className="bg-[#E8EEF7] rounded-full shadow-md flex items-center">
-            <div className="flex-1 grid grid-cols-4 divide-x divide-gray-200">
-                <div className="px-6 py-3">
+            <div className="flex-1 grid grid-cols-4 divide-x divide-gray-200">                <div className="px-6 py-3">
                     <div className="text-sm font-medium text-gray-700 mb-1">Level</div>                    <select 
                         name="level"
                         value={filterValues.level}
                         onChange={handleFilterChange}
                         className="w-full bg-transparent text-gray-500 border-none focus:ring-0 text-sm py-1"
+                        disabled={filterOptionsLoading}
                     >
                         <option value="">Select Level</option>
-                        <option value="Undergraduate">Undergraduate</option>
-                        <option value="Master's">Master's</option>
-                        <option value="PhD">PhD</option>
-                        <option value="Postgraduate">Postgraduate</option>
-                        <option value="Research">Research</option>
+                        {filterOptions?.levels.map((level) => (
+                            <option key={level.id} value={level.name}>
+                                {level.name}
+                            </option>
+                        ))}
                     </select>
-                </div>
-                <div className="px-6 py-3">
+                </div>                <div className="px-6 py-3">
                     <div className="text-sm font-medium text-gray-700 mb-1">Country</div>                    <select 
                         name="country"
                         value={filterValues.country}
                         onChange={handleFilterChange}
                         className="w-full bg-transparent text-gray-500 border-none focus:ring-0 text-sm py-1"
+                        disabled={filterOptionsLoading}
                     >
                         <option value="">Select Country</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Canada">Canada</option>
-                        <option value="China">China</option>
-                        <option value="France">France</option>
-                        <option value="Germany">Germany</option>
-                        <option value="India">India</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="United States">United States</option>
+                        {filterOptions?.countries.map((country) => (
+                            <option key={country.id} value={country.name}>
+                                {country.name}
+                            </option>
+                        ))}
                     </select>
-                </div>
-                <div className="px-6 py-3">
+                </div>                <div className="px-6 py-3">
                     <div className="text-sm font-medium text-gray-700 mb-1">Field</div>                    <select 
                         name="field"
                         value={filterValues.field}
                         onChange={handleFilterChange}
                         className="w-full bg-transparent text-gray-500 border-none focus:ring-0 text-sm py-1"
+                        disabled={filterOptionsLoading}
                     >
                         <option value="">Select field</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Business">Business</option>
-                        <option value="Medicine">Medicine</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="Arts">Arts</option>
-                        <option value="Science">Science</option>
-                        <option value="Social Sciences">Social Sciences</option>
+                        {filterOptions?.fields_of_study.map((field) => (
+                            <option key={field.id} value={field.name}>
+                                {field.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="px-6 py-3">
