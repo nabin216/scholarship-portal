@@ -94,7 +94,7 @@ const HowItWorks = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How ScholarMatch Works</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How ScholarScanner Works</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Discover how our platform helps you find and win scholarships in four simple steps
             </p>
@@ -148,7 +148,7 @@ const HowItWorks = () => {
 
         {/* Features Grid */}
         <div className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Why Choose ScholarMatch?</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Why Choose ScholarScanner?</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
@@ -207,7 +207,7 @@ const HowItWorks = () => {
             </Link>
             <Link href="/faq#free" className="block p-6 hover:bg-gray-50 transition-colors">
               <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-900">Is ScholarMatch really free?</span>
+                <span className="font-medium text-gray-900">Is ScholarScanner really free?</span>
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -220,7 +220,7 @@ const HowItWorks = () => {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-8 text-white text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to Find Your Perfect Scholarship?</h2>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Join thousands of students who have already discovered their ideal scholarships through ScholarMatch.
+            Join thousands of students who have already discovered their ideal scholarships through ScholarScanner.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/Authentication/register" className="bg-white text-blue-600 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium">

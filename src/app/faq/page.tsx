@@ -7,12 +7,12 @@ const FAQ = () => {
       category: "Getting Started",
       questions: [
         {
-          question: "How do I create an account on ScholarMatch?",
+          question: "How do I create an account on ScholarScanner?",
           answer: "Creating an account is simple! Click the 'Sign Up' button at the top of the page, fill in your basic information, and verify your email address. You can also sign up using your Google account for faster registration."
         },
         {
-          question: "Is ScholarMatch free to use?",
-          answer: "Yes, ScholarMatch is completely free for students. We believe every student should have access to scholarship opportunities regardless of their financial situation."
+          question: "Is ScholarScanner free to use?",
+          answer: "Yes, ScholarScanner is completely free for students. We believe every student should have access to scholarship opportunities regardless of their financial situation."
         },
         {
           question: "What information do I need to provide in my profile?",
@@ -41,8 +41,8 @@ const FAQ = () => {
       category: "Applications",
       questions: [
         {
-          question: "How do I apply for scholarships through ScholarMatch?",
-          answer: "While ScholarMatch helps you discover scholarships, applications are typically submitted directly to the scholarship provider. Each scholarship listing includes detailed application instructions and links to the provider's application portal."
+          question: "How do I apply for scholarships through ScholarScanner?",
+          answer: "While ScholarScanner helps you discover scholarships, applications are typically submitted directly to the scholarship provider. Each scholarship listing includes detailed application instructions and links to the provider's application portal."
         },
         {
           question: "Can I track my scholarship applications?",
@@ -75,7 +75,7 @@ const FAQ = () => {
       category: "Eligibility & Requirements",
       questions: [
         {
-          question: "Do I need to be a US citizen to use ScholarMatch?",
+          question: "Do I need to be a US citizen to use ScholarScanner?",
           answer: "No! While many scholarships are for US citizens, we also feature opportunities for international students, DACA recipients, and students with various citizenship statuses. Use our filters to find scholarships you're eligible for."
         },
         {
@@ -98,7 +98,7 @@ const FAQ = () => {
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Find quick answers to the most common questions about ScholarMatch
+              Find quick answers to the most common questions about ScholarScanner
             </p>
           </div>
         </div>

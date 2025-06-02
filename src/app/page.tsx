@@ -43,7 +43,7 @@ const HomePage = () => {
         {
             name: 'Sarah Johnson',
             role: 'Engineering Student',
-            content: 'ScholarMatch helped me find the perfect scholarship for my computer science degree. The process was so simple!',
+            content: 'ScholarScanner helped me find the perfect scholarship for my computer science degree. The process was so simple!',
             rating: 5
         },
         {
@@ -67,7 +67,7 @@ const HomePage = () => {
                 }}>                    <div className="container mx-auto">
                         <div className="text-center mb-16">
                             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                                Find your scholarship with ScholarMatch
+                                Find your scholarship with ScholarScanner
                             </h1>
                             <p className="text-lg text-gray-600">
                                 Discover thousands of opportunities worldwide!
@@ -168,7 +168,7 @@ const HomePage = () => {
                 <div className="container mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                            Why Choose ScholarMatch?
+                            Why Choose ScholarScanner?
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                             Our platform combines cutting-edge technology with comprehensive scholarship databases to give you the best chance of success.

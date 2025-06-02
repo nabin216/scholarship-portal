@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { AuthProvider } from './Authentication/context/AuthContext';
 
 export const metadata: Metadata = {
-  title: 'ScholarMatch - Find Your Perfect Scholarship',
+  title: 'ScholarScanner - Find Your Perfect Scholarship',
   description: 'Discover thousands of scholarships tailored to your profile. Our AI-powered platform makes finding and applying for scholarships easier than ever.',
   keywords: 'scholarships, education, financial aid, college funding, university scholarships',
 }
