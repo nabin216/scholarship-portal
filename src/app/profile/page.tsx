@@ -72,9 +72,8 @@ const ProfilePage = () => {
   }, [loading, isAuthenticated, router]);
     const fetchUserProfile = async () => {
     try {
-      const token = localStorage.getItem('authToken');
-      if (!token) return;
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/me/`, {
+      const token = localStorage.getItem('authToken');      if (!token) return;
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/auth/me/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -126,9 +125,8 @@ const ProfilePage = () => {
         
         // Django DRF expects multipart/form-data for nested serializers to be properly formatted
         formData.append('profile.profile_picture', file);
-        
-        // Send the profile picture to the backend
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/users/update-profile/`, {
+          // Send the profile picture to the backend
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/users/update-profile/`, {
           method: 'PATCH', // Using PATCH to update only the profile picture
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -159,9 +157,8 @@ const ProfilePage = () => {
     setMessage(null);
     
     try {
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error('Authentication token not found');
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/users/update-profile/`, {
+      const token = localStorage.getItem('authToken');      if (!token) throw new Error('Authentication token not found');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/users/update-profile/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -238,9 +235,8 @@ const ProfilePage = () => {
       return;
     }
     
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error('Authentication token not found');      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/change-password/`, {
+    try {      const token = localStorage.getItem('authToken');
+      if (!token) throw new Error('Authentication token not found');      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/auth/change-password/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

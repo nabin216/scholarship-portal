@@ -28,8 +28,7 @@ export default function ApplicationsPage() {
       try {
         const token = localStorage.getItem('authToken');
         if (!token) throw new Error('Authentication token not found');
-        
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/applications/`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/applications/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -57,8 +56,7 @@ export default function ApplicationsPage() {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('Authentication token not found');
-      
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/applications/${applicationId}/`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/applications/${applicationId}/`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -19,7 +19,7 @@ const RelatedScholarships = ({ currentScholarshipId }: { currentScholarshipId: n
         setError(null);
 
         // Fetch random scholarships (excluding current one)
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?limit=4`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholarships/?limit=4`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch related scholarships');
@@ -199,7 +199,7 @@ const ScholarshipDetails = () => {
       }
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/${scholarshipId}/`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholarships/${scholarshipId}/`);
         
         if (!response.ok) {
           if (response.status === 404) {
@@ -231,10 +231,8 @@ const ScholarshipDetails = () => {
 
       try {
         const token = localStorage.getItem('authToken');
-        if (!token) return;
-
-        // Check if saved
-        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        if (!token) return;        // Check if saved
+        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -242,10 +240,8 @@ const ScholarshipDetails = () => {
           const savedData = await savedResponse.json();
           const savedIds = (savedData.results || savedData).map((saved: any) => saved.scholarship);
           setIsSaved(savedIds.includes(parseInt(scholarshipId)));
-        }
-
-        // Check if applied
-        const applicationsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/applications/`, {
+        }        // Check if applied
+        const applicationsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/applications/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -276,9 +272,8 @@ const ScholarshipDetails = () => {
         throw new Error('Authentication token not found');
       }
 
-      if (isSaved) {
-        // Remove from saved
-        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+      if (isSaved) {        // Remove from saved
+        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -290,7 +285,7 @@ const ScholarshipDetails = () => {
           
           if (savedItem) {
             const deleteResponse = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedItem.id}/`,
+              `${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/${savedItem.id}/`,
               {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -302,9 +297,8 @@ const ScholarshipDetails = () => {
             }
           }
         }
-      } else {
-        // Add to saved
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+      } else {        // Add to saved
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

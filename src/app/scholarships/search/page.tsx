@@ -15,41 +15,42 @@ const ScholarshipSearch = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
-  const [filterOptionsLoading, setFilterOptionsLoading] = useState(true);
-  const [filters, setFilters] = useState<Filters>({
-    levels: '',
-    country: '',
-    field_of_study: '',
-    fund_type: '',
-    sponsor_type: '',
-    scholarship_category: '',
-    deadline_before: '',
-    language_requirement: ''
-  });
+  const [filterOptionsLoading, setFilterOptionsLoading] = useState(true);  // Initialize filters from URL parameters or empty values
+  const initializeFilters = (): Filters => {
+    const initialFilters = {
+      levels: '',
+      country: '',
+      field_of_study: '',
+      fund_type: '',
+      sponsor_type: '',
+      scholarship_category: '',
+      deadline_before: '',
+      language_requirement: ''
+    };
+
+    if (searchParams) {
+      ['levels', 'country', 'field_of_study', 'fund_type', 'sponsor_type', 'scholarship_category', 'deadline_before', 'language_requirement'].forEach(param => {
+        const value = searchParams.get(param);
+        if (value) {
+          initialFilters[param as keyof Filters] = value;
+        }
+      });
+    }
+
+    return initialFilters;
+  };
+
+  const [filters, setFilters] = useState<Filters>(initializeFilters);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'deadline', direction: 'asc' });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [savingScholarships, setSavingScholarships] = useState<Set<number>>(new Set());
   const [savedScholarships, setSavedScholarships] = useState<Set<number>>(new Set());
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // Initialize filters from URL parameters
+  // Update filters when URL parameters change (for subsequent navigations)
   useEffect(() => {
-    if (searchParams) {
-      const newFilters = { ...filters };
-      let hasChanges = false;
-      
-      ['levels', 'country', 'field_of_study', 'fund_type', 'sponsor_type', 'scholarship_category', 'deadline_before', 'language_requirement'].forEach(param => {
-        const value = searchParams.get(param);
-        if (value) {
-          newFilters[param as keyof Filters] = value;
-          hasChanges = true;
-        }
-      });
-      
-      if (hasChanges) {
-        setFilters(newFilters);
-      }
-    }
+    const newFilters = initializeFilters();
+    setFilters(newFilters);
   }, [searchParams]);
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -72,7 +73,7 @@ const ScholarshipSearch = () => {
     const fetchFilterOptions = async () => {
       try {
         setFilterOptionsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/filter-options/`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholarships/filter-options/`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -96,8 +97,7 @@ const ScholarshipSearch = () => {
   // Fetch scholarships based on filters
   useEffect(() => {
     const fetchScholarships = async () => {
-      try {
-        setLoading(true);
+      try {        setLoading(true);
         const queryParams = new URLSearchParams();
         
         // Add each filter value if it exists
@@ -107,7 +107,7 @@ const ScholarshipSearch = () => {
           }
         });
         
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?${queryParams}`;
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/scholarships/?${queryParams}`;
         console.log('Fetching scholarships with URL:', apiUrl);
         
         const response = await fetch(apiUrl);
@@ -142,8 +142,7 @@ const ScholarshipSearch = () => {
       try {
         const token = localStorage.getItem('authToken');
         if (!token) return;
-        
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -179,7 +178,7 @@ const ScholarshipSearch = () => {
 
       if (savedScholarships.has(scholarshipId)) {
         // Remove from saved
-        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        const savedResponse = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -191,7 +190,7 @@ const ScholarshipSearch = () => {
           
           if (savedItem) {
             const deleteResponse = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedItem.id}/`,
+              `http://localhost:8000/api/user/saved-scholarships/${savedItem.id}/`,
               {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -209,7 +208,7 @@ const ScholarshipSearch = () => {
         }
       } else {
         // Add to saved
-        const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/', {
+        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

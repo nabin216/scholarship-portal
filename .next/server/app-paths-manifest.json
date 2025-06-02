@@ -1,8 +1,5 @@
 {
-  "/help-center/page": "app/help-center/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/support-team/page": "app/support-team/page.js",
-  "/scholarships/search/page": "app/scholarships/search/page.js",
-  "/get-in-touch/page": "app/get-in-touch/page.js",
-  "/Authentication/register/page": "app/Authentication/register/page.js"
+  "/scholarships/search/page": "app/scholarships/search/page.js"
 }

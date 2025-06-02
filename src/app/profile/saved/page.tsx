@@ -43,7 +43,7 @@ export default function SavedScholarshipsPage() {
           setError('You must be logged in to view saved scholarships');
           setLoading(false);
           return;
-        }        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        }        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -73,9 +73,8 @@ export default function SavedScholarshipsPage() {
       setError(null);
       setSuccessMessage(null);
       
-      const token = localStorage.getItem('authToken');
-      if (!token) throw new Error('Authentication token not found');
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${scholarshipId}/`, {
+      const token = localStorage.getItem('authToken');      if (!token) throw new Error('Authentication token not found');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/${scholarshipId}/`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -106,7 +105,7 @@ export default function SavedScholarshipsPage() {
       if (!token) throw new Error('Authentication token not found');
 
       // Create application
-      const applicationResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/applications/`, {
+      const applicationResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/applications/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,10 +121,8 @@ export default function SavedScholarshipsPage() {
       if (!applicationResponse.ok) {
         const errorData = await applicationResponse.json().catch(() => ({}));
         throw new Error(errorData.detail || 'Failed to create application');
-      }
-
-      // Remove from saved scholarships
-      const removeResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedScholarship.id}/`, {
+      }      // Remove from saved scholarships
+      const removeResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/saved-scholarships/${savedScholarship.id}/`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

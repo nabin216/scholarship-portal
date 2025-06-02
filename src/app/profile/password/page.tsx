@@ -84,16 +84,15 @@ const ChangePasswordPage = () => {
         new_password2: formData.confirmPassword,
       };
       console.log('Password change request data:', JSON.stringify(requestData));
-        
-      // Make sure the URL matches exactly what's in the backend urls.py
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/change-password/`, {
+          // Make sure the URL matches exactly what's in the backend urls.py
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/auth/change-password/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
-      });        if (!response.ok) {
+      });if (!response.ok) {
         console.error('Password change failed with status:', response.status);
         const errorData = await response.json();
         console.error('Error response:', errorData);

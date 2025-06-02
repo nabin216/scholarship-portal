@@ -24,12 +24,11 @@ const FeaturedProviders = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   
   const scrollContainer = React.useRef<HTMLDivElement>(null);
-    useEffect(() => {
-    const fetchFeaturedScholarships = async () => {
+    useEffect(() => {    const fetchFeaturedScholarships = async () => {
       try {
         setLoading(true);
         // Fetch featured scholarships from the backend
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?is_featured=true`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholarships/?is_featured=true`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch featured scholarships: ${response.status}`);

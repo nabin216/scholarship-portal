@@ -14,16 +14,28 @@ const HomeSearchFilter = () => {
         country: '',
         field: '',
         deadline: ''
-    });
-
-    // Fetch filter options from backend
+    });    // Fetch filter options from backend
     useEffect(() => {
         const fetchFilterOptions = async () => {
             try {
                 setFilterOptionsLoading(true);
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/filter-options/`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholarships/filter-options/`);
                 
                 if (!response.ok) {
+                    if (response.status === 429) {
+                        console.warn('Rate limit exceeded. Using fallback filter options.');
+                        // Set basic fallback options for filters
+                        setFilterOptions({
+                            levels: ['Bachelor', 'Master', 'PhD', 'Postdoc'],
+                            countries: ['Canada', 'USA', 'UK', 'Australia', 'Germany'],
+                            fields_of_study: ['Engineering', 'Computer Science', 'Business', 'Medicine', 'Arts'],
+                            fund_types: ['Full Funding', 'Partial Funding', 'Tuition Only'],
+                            sponsor_types: ['Government', 'University', 'Private', 'Foundation'],
+                            scholarship_categories: ['Merit-based', 'Need-based', 'Research'],
+                            language_requirements: ['English', 'French', 'German', 'Spanish']
+                        });
+                        return;
+                    }
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
@@ -32,7 +44,16 @@ const HomeSearchFilter = () => {
                 
             } catch (error) {
                 console.error('Error fetching filter options:', error);
-                // Keep filter options as null on error, components will handle gracefully
+                // Set basic fallback options on any error
+                setFilterOptions({
+                    levels: ['Bachelor', 'Master', 'PhD', 'Postdoc'],
+                    countries: ['Canada', 'USA', 'UK', 'Australia', 'Germany'],
+                    fields_of_study: ['Engineering', 'Computer Science', 'Business', 'Medicine', 'Arts'],
+                    fund_types: ['Full Funding', 'Partial Funding', 'Tuition Only'],
+                    sponsor_types: ['Government', 'University', 'Private', 'Foundation'],
+                    scholarship_categories: ['Merit-based', 'Need-based', 'Research'],
+                    language_requirements: ['English', 'French', 'German', 'Spanish']
+                });
             } finally {
                 setFilterOptionsLoading(false);
             }
