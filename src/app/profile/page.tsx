@@ -74,7 +74,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) return;
-        const response = await fetch('http://localhost:8000/api/user/auth/me/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/me/`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -128,7 +128,7 @@ const ProfilePage = () => {
         formData.append('profile.profile_picture', file);
         
         // Send the profile picture to the backend
-        const response = await fetch('http://localhost:8000/api/user/users/update-profile/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/users/update-profile/`, {
           method: 'PATCH', // Using PATCH to update only the profile picture
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -161,7 +161,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem('authToken');
       if (!token) throw new Error('Authentication token not found');
-        const response = await fetch('http://localhost:8000/api/user/users/update-profile/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/users/update-profile/`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -240,7 +240,7 @@ const ProfilePage = () => {
     
     try {
       const token = localStorage.getItem('authToken');
-      if (!token) throw new Error('Authentication token not found');      const response = await fetch('http://localhost:8000/api/user/auth/change-password/', {
+      if (!token) throw new Error('Authentication token not found');      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/change-password/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

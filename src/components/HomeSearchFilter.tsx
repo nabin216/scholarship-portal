@@ -21,7 +21,7 @@ const HomeSearchFilter = () => {
         const fetchFilterOptions = async () => {
             try {
                 setFilterOptionsLoading(true);
-                const response = await fetch('http://localhost:8000/api/scholarships/filter-options/');
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/filter-options/`);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

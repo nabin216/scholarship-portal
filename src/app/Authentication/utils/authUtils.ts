@@ -43,7 +43,7 @@ export const refreshToken = async (): Promise<boolean> => {
   if (!refreshToken) return false;
   
   try {
-    const response = await fetch('http://localhost:8000/api/user/auth/token/refresh/', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/token/refresh/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export const fetchWithAuth = async (
 // Perform a profile data fetch
 export const fetchUserProfile = async () => {
   try {
-    const response = await fetchWithAuth('http://localhost:8000/api/user/users/profile/');
+    const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/api/user/users/profile/`);
     
     if (!response.ok) {
       throw new Error('Failed to fetch profile data');
@@ -123,7 +123,7 @@ export const fetchUserProfile = async () => {
 export const saveScholarship = async (scholarshipId: number) => {
   try {
     const response = await fetchWithAuth(
-      'http://localhost:8000/api/user/saved-scholarships/',
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`,
       {
         method: 'POST',
         body: JSON.stringify({ scholarship_id: scholarshipId }),
@@ -145,7 +145,7 @@ export const saveScholarship = async (scholarshipId: number) => {
 export const unsaveScholarship = async (savedScholarshipId: number) => {
   try {
     const response = await fetchWithAuth(
-      `http://localhost:8000/api/user/saved-scholarships/${savedScholarshipId}/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedScholarshipId}/`,
       {
         method: 'DELETE',
       }

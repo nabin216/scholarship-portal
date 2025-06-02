@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (token) {
         try {
           // First, verify the token is valid
-          const verifyResponse = await fetch('http://localhost:8000/api/user/auth/token/verify/', {
+          const verifyResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/token/verify/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
               try {
-                const refreshResponse = await fetch('http://localhost:8000/api/user/auth/token/refresh/', {
+                const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/token/refresh/`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     const fetchUserData = async (token: string) => {
       try {
-        const response = await fetch('http://localhost:8000/api/user/auth/me/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/me/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleGoogleCallback = async (token: string, userData: any): Promise<void> => {
     try {      // Exchange the Google auth token for our app JWT
-      const response = await fetch('http://localhost:8000/api/user/auth/google/token/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/google/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('refreshToken');
       
-      const response = await fetch('http://localhost:8000/api/user/auth/login/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

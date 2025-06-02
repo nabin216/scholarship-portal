@@ -86,7 +86,7 @@ const ChangePasswordPage = () => {
       console.log('Password change request data:', JSON.stringify(requestData));
         
       // Make sure the URL matches exactly what's in the backend urls.py
-      const response = await fetch('http://localhost:8000/api/user/auth/change-password/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth/change-password/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -1,9 +1,5 @@
 {
-  "/faq/page": "app/faq/page.js",
-  "/get-in-touch/page": "app/get-in-touch/page.js",
   "/page": "app/page.js",
   "/scholarships/search/page": "app/scholarships/search/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/Authentication/register/page": "app/Authentication/register/page.js",
-  "/Authentication/login/page": "app/Authentication/login/page.js"
+  "/scholarships/scholarshipdetails/page": "app/scholarships/scholarshipdetails/page.js"
 }

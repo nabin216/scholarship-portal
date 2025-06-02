@@ -72,7 +72,7 @@ const ScholarshipSearch = () => {
     const fetchFilterOptions = async () => {
       try {
         setFilterOptionsLoading(true);
-        const response = await fetch('http://localhost:8000/api/scholarships/filter-options/');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/filter-options/`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -107,7 +107,7 @@ const ScholarshipSearch = () => {
           }
         });
         
-        const apiUrl = `http://localhost:8000/api/scholarships/?${queryParams}`;
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?${queryParams}`;
         console.log('Fetching scholarships with URL:', apiUrl);
         
         const response = await fetch(apiUrl);
@@ -143,7 +143,7 @@ const ScholarshipSearch = () => {
         const token = localStorage.getItem('authToken');
         if (!token) return;
         
-        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -179,7 +179,7 @@ const ScholarshipSearch = () => {
 
       if (savedScholarships.has(scholarshipId)) {
         // Remove from saved
-        const savedResponse = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -191,7 +191,7 @@ const ScholarshipSearch = () => {
           
           if (savedItem) {
             const deleteResponse = await fetch(
-              `http://localhost:8000/api/user/saved-scholarships/${savedItem.id}/`,
+              `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedItem.id}/`,
               {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -209,7 +209,7 @@ const ScholarshipSearch = () => {
         }
       } else {
         // Add to saved
-        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
+        const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

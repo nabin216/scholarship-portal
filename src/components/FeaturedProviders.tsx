@@ -29,7 +29,7 @@ const FeaturedProviders = () => {
       try {
         setLoading(true);
         // Fetch featured scholarships from the backend
-        const response = await fetch('http://localhost:8000/api/scholarships/?is_featured=true');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?is_featured=true`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch featured scholarships: ${response.status}`);

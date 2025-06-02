@@ -595,6 +595,9 @@ video {
 .visible {
   visibility: visible;
 }
+.static {
+  position: static;
+}
 .fixed {
   position: fixed;
 }
@@ -1668,23 +1671,23 @@ video {
 .leading-5 {
   line-height: 1.25rem;
 }
+.leading-none {
+  line-height: 1;
+}
 .leading-relaxed {
   line-height: 1.625;
 }
 .leading-tight {
   line-height: 1.25;
 }
-.leading-none {
-  line-height: 1;
+.tracking-tight {
+  letter-spacing: -0.025em;
 }
 .tracking-wider {
   letter-spacing: 0.05em;
 }
 .tracking-widest {
   letter-spacing: 0.1em;
-}
-.tracking-tight {
-  letter-spacing: -0.025em;
 }
 .text-black {
   --tw-text-opacity: 1;
@@ -1818,6 +1821,10 @@ video {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
+.text-yellow-500 {
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity, 1));
+}
 .text-yellow-600 {
   --tw-text-opacity: 1;
   color: rgb(202 138 4 / var(--tw-text-opacity, 1));
@@ -1825,10 +1832,6 @@ video {
 .text-yellow-800 {
   --tw-text-opacity: 1;
   color: rgb(133 77 14 / var(--tw-text-opacity, 1));
-}
-.text-yellow-500 {
-  --tw-text-opacity: 1;
-  color: rgb(234 179 8 / var(--tw-text-opacity, 1));
 }
 .underline {
   text-decoration-line: underline;
@@ -2086,6 +2089,11 @@ video {
   color: rgb(30 58 138 / var(--tw-text-opacity, 1));
 }
 
+.hover\:text-gray-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity, 1));
@@ -2119,11 +2127,6 @@ video {
 .hover\:text-red-900:hover {
   --tw-text-opacity: 1;
   color: rgb(127 29 29 / var(--tw-text-opacity, 1));
-}
-
-.hover\:text-gray-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
 }
 
 .hover\:underline:hover {
@@ -2482,14 +2485,14 @@ video {
     flex-direction: row;
   }
 
-  .md\:text-4xl {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
+  }
+
+  .md\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
   }
 }
 
