@@ -1,12 +1,13 @@
+# Netlify configuration for Next.js
 [build]
   command = "npm run build"
   publish = ".next"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Use Netlify's Next.js Runtime
+[build.environment]
+  NEXT_PRIVATE_TARGET = "server"
 
+# Headers for security
 [[headers]]
   for = "/*"
   [headers.values]
