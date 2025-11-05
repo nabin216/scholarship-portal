@@ -4,10 +4,22 @@ const repoName = 'scholarship-scanner-frontend'
 
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   output: 'export', // Enable static HTML export for GitHub Pages
   images: {
-    domains: ['example.com', '13.61.181.192', '13.62.43.154'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+      },
+      {
+        protocol: 'http',
+        hostname: '13.61.181.192',
+      },
+      {
+        protocol: 'http',
+        hostname: '13.62.43.154',
+      },
+    ],
     unoptimized: true // Required for static export
   },
   // Base path for GitHub Pages repository subdirectory
