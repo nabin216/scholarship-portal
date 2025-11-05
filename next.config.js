@@ -2,23 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // Remove 'standalone' for Netlify deployment
-  // output: 'standalone', // Only for server deployment on EC2
+  output: 'export', // Enable static HTML export for GitHub Pages
   images: {
-    domains: ['example.com', '13.61.181.192', '13.62.43.154'], // Add your image domains here
-    unoptimized: true // For better compatibility
+    domains: ['example.com', '13.61.181.192', '13.62.43.154'],
+    unoptimized: true // Required for static export
   },
-  // API configuration
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://13.62.43.154:8000/api'}/:path*`
-      }
-    ];
-  },
-  // Ensure trailing slashes work correctly
-  trailingSlash: false,
+  // Base path for GitHub Pages (uncomment and update if using /repo-name/)
+  // basePath: '/scholarship-scanner-frontend',
+  // assetPrefix: '/scholarship-scanner-frontend/',
+  trailingSlash: true, // Required for GitHub Pages
 };
 
 module.exports = nextConfig;
