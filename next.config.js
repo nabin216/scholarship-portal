@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production'
+const repoName = 'scholarship-scanner-frontend'
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -8,8 +11,8 @@ const nextConfig = {
     unoptimized: true // Required for static export
   },
   // Base path for GitHub Pages repository subdirectory
-  basePath: '/scholarship-scanner-frontend',
-  assetPrefix: '/scholarship-scanner-frontend/',
+  basePath: isProd ? `/${repoName}` : '',
+  assetPrefix: isProd ? `/${repoName}/` : '',
   trailingSlash: true, // Required for GitHub Pages
 };
 
