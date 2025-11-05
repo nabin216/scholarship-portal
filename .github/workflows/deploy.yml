@@ -48,6 +48,11 @@ jobs:
           echo "Root of out/" && ls -la out
           echo "\n_out/_next/" && ls -la out/_next || true
           echo "\nRecursive listing (first 200 lines):" && ls -R out | sed -n '1,200p'
+
+      - name: Inspect CSS links in HTML
+        run: |
+          echo "\nStylesheet links in index.html:" && grep -o '<link[^>]*rel="stylesheet"[^>]*>' out/index.html || true
+          echo "\nFirst 5 lines of each CSS file (if any):" && for f in $(ls out/_next/static/chunks/*.css 2>/dev/null | head -n 5); do echo "\n== $f =="; head -n 5 "$f"; done
       
       - name: Add .nojekyll file
         run: touch ./out/.nojekyll
