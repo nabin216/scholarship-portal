@@ -12,7 +12,7 @@ const nextConfig = {
   },
   // Base path for GitHub Pages repository subdirectory
   basePath: isProd ? `/${repoName}` : '',
-  assetPrefix: isProd ? `/${repoName}/` : '',
+  // assetPrefix is not needed when basePath is set - basePath applies to all assets automatically
   trailingSlash: true, // Required for GitHub Pages
 };
 
