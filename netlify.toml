@@ -3,9 +3,9 @@
   command = "npm run build"
   publish = ".next"
 
-# Use Netlify's Next.js Runtime
-[build.environment]
-  NEXT_PRIVATE_TARGET = "server"
+# Essential Next.js Plugin
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Headers for security
 [[headers]]
