@@ -1,3 +1,4 @@
+import basePath from '@/lib/basePath'
 import React from 'react';
 import Link from 'next/link';
 
@@ -118,7 +119,7 @@ const Footer: React.FC = () => {
                     {/* Mobile Layout: Stacked */}
                     <div className="flex flex-col space-y-4 sm:hidden">
                         <div className="flex items-start space-x-3">
-                            <img src="/images/icon-handshake.svg" alt="Handshake" className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0" />
+                            <img src={`${basePath}/images/icon-handshake.svg`} alt="Handshake" className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
                                 <h3 className="font-semibold text-sm sm:text-base mb-1 leading-tight">Psst! Find exclusive opportunities and insider tips!</h3>
                                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
@@ -132,7 +133,7 @@ const Footer: React.FC = () => {
                     {/* Desktop Layout: Horizontal */}
                     <div className="hidden sm:flex items-center justify-between">
                         <div className="flex items-center">
-                            <img src="/images/icon-handshake.svg" alt="Handshake" className="w-12 h-12 mr-4 flex-shrink-0" />
+                            <img src={`${basePath}/images/icon-handshake.svg`} alt="Handshake" className="w-12 h-12 mr-4 flex-shrink-0" />
                             <div>
                                 <h3 className="font-semibold mb-1">Psst! Find exclusive opportunities and insider tips!</h3>
                                 <p className="text-sm text-gray-600">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
