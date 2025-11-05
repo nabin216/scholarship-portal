@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === 'production'
-const repoName = 'scholarship-scanner-frontend'
+const repoName = 'scholarship-portal'
 
 const nextConfig = {
   reactStrictMode: true,
@@ -24,7 +24,8 @@ const nextConfig = {
   },
   // Base path for GitHub Pages repository subdirectory
   basePath: isProd ? `/${repoName}` : '',
-  // assetPrefix is not needed when basePath is set - basePath applies to all assets automatically
+  // Ensure chunked CSS/JS and other assets are requested under the repo subpath
+  assetPrefix: isProd ? `/${repoName}/` : '',
   trailingSlash: true, // Required for GitHub Pages
 };
 
