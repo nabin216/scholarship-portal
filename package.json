@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "export": "next build",
-    "deploy": "gh-pages -d out -t true"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d out"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
