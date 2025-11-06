@@ -23,6 +23,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
       
       - name: Setup Node.js (LTS >= 20.9)
         uses: actions/setup-node@v4
