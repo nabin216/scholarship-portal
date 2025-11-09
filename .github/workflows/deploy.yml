@@ -43,8 +43,8 @@ jobs:
         env:
           NODE_ENV: production
           NEXT_PUBLIC_SITE_URL: https://scholarscanner.com
-          NEXT_PUBLIC_API_URL: http://15.206.225.71/api
-          NEXT_PUBLIC_BASE_URL: http://15.206.225.71
+          NEXT_PUBLIC_API_URL: https://api.scholarscanner.com/api
+          NEXT_PUBLIC_BASE_URL: https://api.scholarscanner.com
 
       - name: List built files
         run: |
