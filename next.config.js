@@ -2,6 +2,9 @@
 const isProd = process.env.NODE_ENV === 'production'
 const repoName = 'scholarship-portal'
 
+// Use custom domain detection: if NEXT_PUBLIC_SITE_URL is set, assume custom domain
+const useCustomDomain = process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('github.io')
+
 const nextConfig = {
   reactStrictMode: true,
   output: 'export', // Enable static HTML export for GitHub Pages
@@ -22,10 +25,10 @@ const nextConfig = {
     ],
     unoptimized: true // Required for static export
   },
-  // Base path for GitHub Pages repository subdirectory
-  basePath: isProd ? `/${repoName}` : '',
-  // Ensure chunked CSS/JS and other assets are requested under the repo subpath
-  assetPrefix: isProd ? `/${repoName}/` : '',
+  // Base path: use repo name for GitHub Pages, empty for custom domain
+  basePath: (isProd && !useCustomDomain) ? `/${repoName}` : '',
+  // Asset prefix: match basePath behavior
+  assetPrefix: (isProd && !useCustomDomain) ? `/${repoName}/` : '',
   trailingSlash: true, // Required for GitHub Pages
 };
 

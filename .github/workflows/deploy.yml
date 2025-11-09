@@ -42,6 +42,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_SITE_URL: https://scholarscanner.com
           NEXT_PUBLIC_API_URL: http://13.62.43.154/api
           NEXT_PUBLIC_BASE_URL: http://13.62.43.154
 
