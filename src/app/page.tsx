@@ -12,12 +12,12 @@ import {
   ArrowRightIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
-import Imagr1 from '../../public/images/undergraduate.png'
-import Imagr2 from '../../public/images/masters.png'
-import Imagr3 from '../../public/images/medichine.png'
-import Imagr4 from '../../public/images/research.png'
-import Image5  from '../../public/images/engineering.png'  
-import Image6  from '../../public/images/phd.png'    
+import Imagr1 from '../../public/images/undergraduate.jpg'
+import Imagr2 from '../../public/images/masters.jpg'
+import Imagr3 from '../../public/images/medichine.jpg'
+import Imagr4 from '../../public/images/research.jpg'
+import Image5  from '../../public/images/engineering.jpg'  
+import Image6  from '../../public/images/phd.jpg'    
 
 
 const HomePage = () => {
