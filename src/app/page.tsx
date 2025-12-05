@@ -1,3 +1,4 @@
+import basePath from '@/lib/basePath'
 import Button from '../components/ui/Button';
 import HomeSearchFilter from '../components/HomeSearchFilter';
 import FeaturedProviders from '../components/FeaturedProviders';
@@ -12,6 +13,12 @@ import {
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import Imagr1 from '../../public/images/undergraduate.png'
+import Imagr2 from '../../public/images/masters.png'
+import Imagr3 from '../../public/images/medichine.png'
+import Imagr4 from '../../public/images/research.png'
+import Image5  from '../../public/images/engineering.png'  
+import Image6  from '../../public/images/phd.png'    
+
 
 const HomePage = () => {
     const features = [
@@ -43,7 +50,7 @@ const HomePage = () => {
         {
             name: 'Sarah Johnson',
             role: 'Engineering Student',
-            content: 'ScholarScanner helped me find the perfect scholarship for my computer science degree. The process was so simple!',
+            content: 'ScholarMatch helped me find the perfect scholarship for my computer science degree. The process was so simple!',
             rating: 5
         },
         {
@@ -63,11 +70,11 @@ const HomePage = () => {
               {/* Hero Section */}
             <section className="relative z-0">
                 <div className="relative bg-cover bg-center rounded-none py-16" style={{ 
-                    backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0.5) 100%), url("/images/university.jpg")'
+                    backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0.5) 100%), url("${basePath}/images/university.jpg")`
                 }}>                    <div className="container mx-auto">
                         <div className="text-center mb-16">
                             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                                Find your scholarship with ScholarScanner
+                                Find your scholarship with ScholarMatch
                             </h1>
                             <p className="text-lg text-gray-600">
                                 Discover thousands of opportunities worldwide!
@@ -95,14 +102,14 @@ const HomePage = () => {
                         {/* 2nd card split into two parts */}
                         <div className="grid grid-rows-2 gap-3">
                             <Link href="/scholarships/search?education_level=masters" className="relative aspect-[3/1.7] group cursor-pointer">
-                                <img src={Imagr1.src} alt="Master's" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                                <img src={Imagr2.src} alt="Master's" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Master's
                                 </div>
                                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
                             </Link>
                             <Link href="/scholarships/search?field_of_study=research" className="relative aspect-[3/1.7] group cursor-pointer">
-                                <img src={Imagr1.src} alt="Research" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                                <img src={Imagr4.src} alt="Research" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Research
                                 </div>
@@ -112,14 +119,14 @@ const HomePage = () => {
                         {/* 4th card split into two parts */}
                         <div className="grid grid-rows-2 gap-3">
                             <Link href="/scholarships/search?field_of_study=medicine" className="relative aspect-[3/1.7] group cursor-pointer">
-                            <img src={Imagr1.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <img src={Imagr3.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Medical School
                                 </div>
                                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
                             </Link>
                             <Link href="/scholarships/search?field_of_study=engineering" className="relative aspect-[3/1.7] group cursor-pointer">
-                            <img src={Imagr1.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <img src={Image5.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                                 <div className="absolute bottom-2 left-2 bg-white px-2 py-1 text-xs font-medium group-hover:bg-blue-50 transition-colors">
                                     Engineering
                                 </div>
@@ -128,7 +135,7 @@ const HomePage = () => {
                         </div>
                         
                         <Link href="/scholarships/search?education_level=phd" className="relative aspect-[3/3.5] group cursor-pointer">
-                            <img src={Imagr1.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <img src={Image6.src} alt="PhD" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                             <div className="absolute bottom-3 left-3 bg-white px-2 py-1 text-sm font-medium group-hover:bg-blue-50 transition-colors">
                                 PhD
                             </div>
@@ -168,7 +175,7 @@ const HomePage = () => {
                 <div className="container mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                            Why Choose ScholarScanner?
+                            Why Choose ScholarMatch?
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                             Our platform combines cutting-edge technology with comprehensive scholarship databases to give you the best chance of success.
