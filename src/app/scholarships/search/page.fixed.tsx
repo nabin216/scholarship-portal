@@ -71,7 +71,7 @@ const ScholarshipSearch = () => {
     const fetchFilterOptions = async () => {
       try {
         setFilterOptionsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/filter-options/`);
+        const response = await fetch('http://localhost:8000/api/scholarships/filter-options/');
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -106,7 +106,7 @@ const ScholarshipSearch = () => {
           }
         });
         
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/scholarships/?${queryParams}`;
+        const apiUrl = `http://localhost:8000/api/scholarships/?${queryParams}`;
         console.log('Fetching scholarships with URL:', apiUrl);
         
         const response = await fetch(apiUrl);
@@ -142,7 +142,7 @@ const ScholarshipSearch = () => {
         const token = localStorage.getItem('authToken');
         if (!token) return;
         
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -178,7 +178,7 @@ const ScholarshipSearch = () => {
 
       if (savedScholarships.has(scholarshipId)) {
         // Remove from saved
-        const savedResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        const savedResponse = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -190,7 +190,7 @@ const ScholarshipSearch = () => {
           
           if (savedItem) {
             const deleteResponse = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/${savedItem.id}/`,
+              `http://localhost:8000/api/user/saved-scholarships/${savedItem.id}/`,
               {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -208,7 +208,7 @@ const ScholarshipSearch = () => {
         }
       } else {
         // Add to saved
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/saved-scholarships/`, {
+        const response = await fetch('http://localhost:8000/api/user/saved-scholarships/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -675,7 +675,7 @@ const ScholarshipSearch = () => {
 
                       {/* Desktop Layout */}
                       <div className="hidden sm:block">
-                        <div className="flex h-48">
+                        <div className="relative flex h-48">
                           {/* Scholarship Image */}
                           <div className="w-48 h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
                             {scholarship.image ? (
@@ -747,26 +747,27 @@ const ScholarshipSearch = () => {
                                 </div>
                               </div>
                             </Link>
-                            
-                            {/* Desktop save button in its own section */}
-                            <div className="px-4 pb-3 pt-1">
-                              <button
-                                onClick={() => handleSaveScholarship(scholarship.id)}
-                                disabled={savingScholarships.has(scholarship.id)}
-                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors self-end float-right ${
-                                  savedScholarships.has(scholarship.id)
-                                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                                    : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
-                                } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              >
-                                {savingScholarships.has(scholarship.id) 
-                                  ? 'Saving...' 
-                                  : savedScholarships.has(scholarship.id) 
-                                    ? '✓ Saved' 
-                                    : '💾 Save'
-                                }
-                              </button>
-                            </div>
+                          </div>
+
+                          {/* Desktop save button pinned top-right */}
+                          <div className="absolute top-3 right-3">
+                            <button
+                              onClick={() => handleSaveScholarship(scholarship.id)}
+                              disabled={savingScholarships.has(scholarship.id)}
+                              className={`py-2 px-4 rounded-md text-sm font-medium transition-colors shadow ${
+                                savedScholarships.has(scholarship.id)
+                                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                                  : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                              } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              {savingScholarships.has(scholarship.id) 
+                                ? 'Saving...' 
+                                : savedScholarships.has(scholarship.id) 
+                                  ? '✓ Saved' 
+                                  : '💾 Save'
+                              }
+                            </button>
+                          </div>
                           </div>
                         </div>
                       </div>

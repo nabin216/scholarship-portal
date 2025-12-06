@@ -736,7 +736,7 @@ const ScholarshipSearchContent = () => {
                         </div>
                       </div>                      {/* Desktop Layout */}
                       <div className="hidden sm:block">
-                        <div className="flex h-48">
+                        <div className="relative flex h-48 pb-6">
                           {/* Scholarship Image */}
                           <div className="w-48 h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
                             {scholarship.image ? (
@@ -808,25 +808,25 @@ const ScholarshipSearchContent = () => {
                                 </div>                              </div>
                             </Link>
                             
-                            {/* Desktop save button */}
-                            <div className="px-4 pb-4 flex justify-end">
-                              <button
-                                onClick={() => handleSaveScholarship(scholarship.id)}
-                                disabled={savingScholarships.has(scholarship.id)}
-                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                                  savedScholarships.has(scholarship.id)
-                                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                                    : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
-                                } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              >
-                                {savingScholarships.has(scholarship.id) 
-                                  ? 'Saving...' 
-                                  : savedScholarships.has(scholarship.id) 
-                                    ? '✓ Saved' 
-                                    : '💾 Save'
-                                }
-                              </button>
-                            </div>
+                          {/* Desktop save button pinned bottom-right */}
+                          <div className="absolute bottom-3 right-3">
+                            <button
+                              onClick={() => handleSaveScholarship(scholarship.id)}
+                              disabled={savingScholarships.has(scholarship.id)}
+                              className={`py-2 px-4 rounded-md text-sm font-medium transition-colors shadow ${
+                                savedScholarships.has(scholarship.id)
+                                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                                  : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                              } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              {savingScholarships.has(scholarship.id) 
+                                ? 'Saving...' 
+                                : savedScholarships.has(scholarship.id) 
+                                  ? '✓ Saved' 
+                                  : '💾 Save'
+                              }
+                            </button>
+                          </div>
                           </div>
                         </div>
                       </div>
