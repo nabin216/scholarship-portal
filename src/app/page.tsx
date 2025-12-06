@@ -175,7 +175,7 @@ const HomePage = () => {
                 <div className="container mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                            Why Choose ScholarMatch?
+                            Why Choose ScholarScanner?
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                             Our platform combines cutting-edge technology with comprehensive scholarship databases to give you the best chance of success.
@@ -207,20 +207,24 @@ const HomePage = () => {
                         Join thousands of students who have already found their perfect scholarship match. It's free and takes less than 5 minutes to get started.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button 
-                            size="xl" 
-                            variant="secondary"
-                            className="bg-white text-primary-600 hover:bg-gray-50"
-                        >
-                            Create Free Account
-                        </Button>
-                        <Button 
-                            size="xl" 
-                            variant="outline"
-                            className="border-white text-white hover:bg-white hover:text-primary-600"
-                        >
-                            Browse Scholarships
-                        </Button>
+                        <Link href="/register">
+                            <Button 
+                                size="xl" 
+                                variant="secondary"
+                                className="bg-white text-primary-600 hover:bg-gray-50"
+                            >
+                                Create Free Account
+                            </Button>
+                        </Link>
+                        <Link href="/scholarships">
+                            <Button 
+                                size="xl" 
+                                variant="outline"
+                                className="border-white text-white hover:bg-white hover:text-primary-600"
+                            >
+                                Browse Scholarships
+                            </Button>
+                        </Link>
                     </div>                </div>
             </section>
         </div>
