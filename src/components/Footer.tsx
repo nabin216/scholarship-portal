@@ -125,9 +125,9 @@ const Footer: React.FC = () => {
                                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
                             </div>
                         </div>
-                        <button className="w-full bg-white text-sm font-medium px-6 py-3 rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors border border-gray-200 shadow-sm">
+                        <Link href="/Authentication/login/" className="w-full bg-white text-sm font-medium px-6 py-3 rounded-md hover:bg-gray-50 active:bg-gray-100 transition-colors border border-gray-200 shadow-sm text-center">
                             Join now
-                        </button>
+                        </Link>
                     </div>
                     
                     {/* Desktop Layout: Horizontal */}
@@ -139,9 +139,9 @@ const Footer: React.FC = () => {
                                 <p className="text-sm text-gray-600">Do you want to discover hidden scholarships and advice from others? Sign up now to unlock your future!</p>
                             </div>
                         </div>
-                        <button className="bg-white text-sm font-medium px-6 py-2 rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex-shrink-0 ml-4">
+                        <Link href="/Authentication/login/" className="bg-white text-sm font-medium px-6 py-2 rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm flex-shrink-0 ml-4 text-center">
                             Join now
-                        </button>
+                        </Link>
                     </div>
                 </div>
 

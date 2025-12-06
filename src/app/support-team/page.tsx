@@ -26,7 +26,7 @@ const SupportTeam = () => {
       ),
       availability: "24/7 - Response within 24 hours",
       action: "Send Email",
-      href: "mailto:support@ScholarScanner.com",
+      href: "mailto:support@scholarScanner.com",
       color: "green"
     },
     {

@@ -50,7 +50,7 @@ const HomePage = () => {
         {
             name: 'Sarah Johnson',
             role: 'Engineering Student',
-            content: 'ScholarMatch helped me find the perfect scholarship for my computer science degree. The process was so simple!',
+            content: 'ScholarScanner helped me find the perfect scholarship for my computer science degree. The process was so simple!',
             rating: 5
         },
         {
@@ -74,7 +74,7 @@ const HomePage = () => {
                 }}>                    <div className="container mx-auto">
                         <div className="text-center mb-16">
                             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                                Find your scholarship with ScholarMatch
+                                Find your scholarship with ScholarScanner
                             </h1>
                             <p className="text-lg text-gray-600">
                                 Discover thousands of opportunities worldwide!
@@ -207,7 +207,7 @@ const HomePage = () => {
                         Join thousands of students who have already found their perfect scholarship match. It's free and takes less than 5 minutes to get started.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/register">
+                        <Link href="/Authentication/login">
                             <Button 
                                 size="xl" 
                                 variant="secondary"
@@ -216,7 +216,7 @@ const HomePage = () => {
                                 Create Free Account
                             </Button>
                         </Link>
-                        <Link href="/scholarships">
+                        <Link href="/scholarships/search/">
                             <Button 
                                 size="xl" 
                                 variant="outline"

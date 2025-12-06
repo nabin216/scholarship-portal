@@ -5,7 +5,7 @@ const GetInTouch = () => {
   const contactMethods = [
     {
       title: "General Inquiries",
-      email: "hello@scholarmatch.com",
+      email: "hello@scholarScanner.com",
       description: "Questions about our platform, partnerships, or general information",
       icon: (
         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@ const GetInTouch = () => {
     },
     {
       title: "Student Support",
-      email: "support@scholarmatch.com",
+      email: "support@scholarScanner.com",
       description: "Help with your account, applications, or technical issues",
       icon: (
         <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,7 +25,7 @@ const GetInTouch = () => {
     },
     {
       title: "Media & Press",
-      email: "press@scholarmatch.com",
+      email: "press@scholarScanner.com",
       description: "Media inquiries, interviews, and press kit requests",
       icon: (
         <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ const GetInTouch = () => {
     },
     {
       title: "Business Development",
-      email: "partnerships@scholarmatch.com",
+      email: "partnerships@scholarScanner.com",
       description: "Partnership opportunities, sponsorships, and business collaborations",
       icon: (
         <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
