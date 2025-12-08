@@ -228,6 +228,8 @@ const HomePage = () => {
                     </div>                </div>
             </section>
         </div>
+        {/* Hidden deployment version marker */}
+        <div className="hidden" data-deployment-version="2025-12-09-v2"></div>
     );
 };
 
