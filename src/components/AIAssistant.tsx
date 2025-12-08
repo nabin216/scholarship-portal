@@ -11,6 +11,7 @@ interface AIMessage {
 }
 
 export default function AIAssistant() {
+  const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<AIMessage[]>([
     {
@@ -38,8 +39,17 @@ export default function AIAssistant() {
   };
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Don't render on server
+  if (!isMounted) {
+    return null;
+  }
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
