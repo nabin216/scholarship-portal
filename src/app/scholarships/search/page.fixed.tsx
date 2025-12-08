@@ -768,7 +768,6 @@ const ScholarshipSearch = () => {
                               }
                             </button>
                           </div>
-                          </div>
                         </div>
                       </div>
                     </div>
