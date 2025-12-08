@@ -459,9 +459,9 @@ const ScholarshipDetailsContent = () => {
             <div className="space-y-3 mb-6 sm:mb-8">
               {/* Academic Levels */}
               {scholarship.levels && scholarship.levels.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Academic Levels:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.levels.map((level, index) => (
                       <span key={level.id}>
                         {level.name}
@@ -474,9 +474,9 @@ const ScholarshipDetailsContent = () => {
 
               {/* Fields of Study */}
               {scholarship.field_of_study && scholarship.field_of_study.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Fields of Study:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.field_of_study.map((field, index) => (
                       <span key={field.id}>
                         {field.name}
@@ -489,9 +489,9 @@ const ScholarshipDetailsContent = () => {
 
               {/* Categories */}
               {scholarship.scholarship_category && scholarship.scholarship_category.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Categories:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.scholarship_category.map((category, index) => (
                       <span key={category.id}>
                         {category.name}
@@ -504,9 +504,9 @@ const ScholarshipDetailsContent = () => {
 
               {/* Fund Types */}
               {scholarship.fund_type && scholarship.fund_type.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Fund Types:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.fund_type.map((fund, index) => (
                       <span key={fund.id}>
                         {fund.name}
@@ -519,9 +519,9 @@ const ScholarshipDetailsContent = () => {
 
               {/* Sponsor Types */}
               {scholarship.sponsor_type && scholarship.sponsor_type.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Sponsor Types:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.sponsor_type.map((sponsor, index) => (
                       <span key={sponsor.id}>
                         {sponsor.name}
@@ -534,9 +534,9 @@ const ScholarshipDetailsContent = () => {
 
               {/* Language Requirements */}
               {scholarship.language_requirement && scholarship.language_requirement.length > 0 && (
-                <div className="text-sm sm:text-base flex">
+                <div className="text-sm sm:text-base flex flex-wrap">
                   <span className="font-semibold text-gray-700 w-36 lg:w-40 flex-shrink-0">Language Requirements:</span>
-                  <span className="text-gray-600 whitespace-nowrap">
+                  <span className="text-gray-600 break-words flex-1">
                     {scholarship.language_requirement.map((lang, index) => (
                       <span key={lang.id}>
                         {lang.name}
