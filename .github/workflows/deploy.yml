@@ -44,7 +44,6 @@ jobs:
           ls -la out/ || echo "No out directory found"
         env:
           NODE_ENV: production
-          NEXT_PUBLIC_SITE_URL: https://scholarscanner.com
           NEXT_PUBLIC_API_URL: https://api.scholarscanner.com/api
           NEXT_PUBLIC_BASE_URL: https://api.scholarscanner.com
       
