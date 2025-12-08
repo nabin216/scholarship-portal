@@ -50,8 +50,7 @@ jobs:
       - name: Add .nojekyll file
         run: |
           touch ./out/.nojekyll
-          cp CNAME ./out/CNAME
-          echo "✅ Added .nojekyll and CNAME files"
+          echo "✅ Added .nojekyll file"
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
