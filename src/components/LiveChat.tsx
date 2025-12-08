@@ -37,7 +37,7 @@ export default function LiveChat({ defaultOpen = false }: LiveChatProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { user, token } = useAuth();
+  const { user } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -73,6 +73,7 @@ export default function LiveChat({ defaultOpen = false }: LiveChatProps) {
   const initializeChat = async () => {
     try {
       setIsLoading(true);
+      const token = localStorage.getItem('authToken');
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/livechat/chat-rooms/`,
         {
@@ -101,6 +102,7 @@ export default function LiveChat({ defaultOpen = false }: LiveChatProps) {
     if (!chatRoom) return;
 
     try {
+      const token = localStorage.getItem('authToken');
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/livechat/chat-rooms/${chatRoom.id}/messages/`,
         {
@@ -126,6 +128,7 @@ export default function LiveChat({ defaultOpen = false }: LiveChatProps) {
 
     try {
       setIsLoading(true);
+      const token = localStorage.getItem('authToken');
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/livechat/chat-rooms/${chatRoom.id}/send_message/`,
         {
@@ -154,6 +157,7 @@ export default function LiveChat({ defaultOpen = false }: LiveChatProps) {
     if (!chatRoom) return;
 
     try {
+      const token = localStorage.getItem('authToken');
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/livechat/chat-rooms/${chatRoom.id}/close_chat/`,
         {
