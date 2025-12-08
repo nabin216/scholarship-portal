@@ -9,37 +9,39 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
       
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Clean installation
+        run: |
+          echo "🧹 Cleaning previous builds..."
+          rm -rf node_modules .next out
+          echo "✅ Clean completed"
       
       - name: Install dependencies
         run: |
-          echo "Installing dependencies..."
+          echo "📦 Installing dependencies..."
           npm ci
           echo "✅ Dependencies installed successfully"
       
-      - name: Build Next.js
+      - name: Build Next.js site
         run: |
           echo "🔨 Building Next.js application..."
           npm run build
           echo "✅ Build completed successfully"
-          ls -la out/
+          echo "📁 Build output:"
+          ls -la out/ || echo "No out directory found"
         env:
           NODE_ENV: production
           NEXT_PUBLIC_SITE_URL: https://scholarscanner.com
@@ -49,7 +51,8 @@ jobs:
       - name: Add .nojekyll file
         run: |
           touch ./out/.nojekyll
-          echo "✅ Added .nojekyll file"
+          cp CNAME ./out/CNAME
+          echo "✅ Added .nojekyll and CNAME files"
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -57,3 +60,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
           publish_branch: gh-pages
+          force_orphan: true
