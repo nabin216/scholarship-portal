@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import AIAssistant from '../components/AIAssistant';
 import { AuthProvider } from './Authentication/context/AuthContext';
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
+          <AIAssistant />
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">
