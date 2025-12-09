@@ -1,0 +1,1 @@
+.scrollbar-hide::-webkit-scrollbar{display:none}.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}.line-clamp-2{-webkit-line-clamp:2;text-overflow:ellipsis;-webkit-box-orient:vertical;height:2.5rem;line-height:1.25rem;display:-webkit-box;overflow:hidden}
