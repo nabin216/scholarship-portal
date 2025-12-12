@@ -649,8 +649,7 @@ const ScholarshipSearchContent = () => {
 
                           {/* Scholarship content */}
                           <Link 
-                            href={scholarship.application_url || `/scholarships/scholarshipdetails?id=${scholarship.id}`}
-                            target={scholarship.application_url ? "_blank" : "_self"}
+                            href={`/scholarships/scholarshipdetails?id=${scholarship.id}`}
                             className="block pt-2 pb-2"
                           >
                             <div className="flex pb-3 pr-3 pt-2 pl-3">
@@ -736,7 +735,7 @@ const ScholarshipSearchContent = () => {
                         </div>
                       </div>                      {/* Desktop Layout */}
                       <div className="hidden sm:block">
-                        <div className="flex h-48">
+                        <div className="relative flex h-48 pb-6">
                           {/* Scholarship Image */}
                           <div className="w-48 h-48 bg-gray-200 flex items-center justify-center flex-shrink-0">
                             {scholarship.image ? (
@@ -756,8 +755,7 @@ const ScholarshipSearchContent = () => {
                           <div className="flex-1 flex flex-col">
                             {/* Link to scholarship details */}
                             <Link 
-                              href={scholarship.application_url || `/scholarships/scholarshipdetails?id=${scholarship.id}`}
-                              target={scholarship.application_url ? "_blank" : "_self"}
+                              href={`/scholarships/scholarshipdetails?id=${scholarship.id}`}
                               className="flex-1 p-4 pb-2"
                             >
                               <div className="flex flex-col space-y-2">
@@ -808,25 +806,25 @@ const ScholarshipSearchContent = () => {
                                 </div>                              </div>
                             </Link>
                             
-                            {/* Desktop save button */}
-                            <div className="px-4 pb-4 flex justify-end">
-                              <button
-                                onClick={() => handleSaveScholarship(scholarship.id)}
-                                disabled={savingScholarships.has(scholarship.id)}
-                                className={`py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                                  savedScholarships.has(scholarship.id)
-                                    ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                                    : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
-                                } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                              >
-                                {savingScholarships.has(scholarship.id) 
-                                  ? 'Saving...' 
-                                  : savedScholarships.has(scholarship.id) 
-                                    ? '✓ Saved' 
-                                    : '💾 Save'
-                                }
-                              </button>
-                            </div>
+                          {/* Desktop save button pinned bottom-right */}
+                          <div className="absolute bottom-3 right-3">
+                            <button
+                              onClick={() => handleSaveScholarship(scholarship.id)}
+                              disabled={savingScholarships.has(scholarship.id)}
+                              className={`py-2 px-4 rounded-md text-sm font-medium transition-colors shadow ${
+                                savedScholarships.has(scholarship.id)
+                                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                                  : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                              } ${savingScholarships.has(scholarship.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              {savingScholarships.has(scholarship.id) 
+                                ? 'Saving...' 
+                                : savedScholarships.has(scholarship.id) 
+                                  ? '✓ Saved' 
+                                  : '💾 Save'
+                              }
+                            </button>
+                          </div>
                           </div>
                         </div>
                       </div>

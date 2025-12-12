@@ -24,6 +24,8 @@ const Footer: React.FC = () => {
                             <Link href="/support-team" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Support Team</Link>
                             <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">How it Works</Link>
                             <Link href="/get-in-touch" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Get in touch</Link>
+                            <Link href="/privacy-policy" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Privacy Policy</Link>
+                            <Link href="/terms-of-service" className="text-gray-600 hover:text-gray-900 py-1 transition-colors">Terms of Service</Link>
                         </div>
                         
                         {/* Desktop: Horizontal links with separators */}
@@ -37,6 +39,10 @@ const Footer: React.FC = () => {
                             <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How it Works</Link>
                             <span className="mx-2 text-gray-400">·</span>
                             <Link href="/get-in-touch" className="text-gray-600 hover:text-gray-900 transition-colors">Get in touch</Link>
+                            <span className="mx-2 text-gray-400">·</span>
+                            <Link href="/privacy-policy" className="text-gray-600 hover:text-gray-900 transition-colors">Privacy Policy</Link>
+                            <span className="mx-2 text-gray-400">·</span>
+                            <Link href="/terms-of-service" className="text-gray-600 hover:text-gray-900 transition-colors">Terms of Service</Link>
                         </div>
                     </nav>
                 </div>
