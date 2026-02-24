@@ -1,5 +1,5 @@
 # Scholarship Portal Frontend 🎓
-
+###Live  www.scholarscanner.com
 A modern, responsive scholarship search and application platform built with Next.js 14, TypeScript, and Tailwind CSS.
 
 ## 🚀 Quick Start
