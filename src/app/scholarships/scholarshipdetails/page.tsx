@@ -102,7 +102,7 @@ const RelatedScholarships = ({ currentScholarshipId }: { currentScholarshipId: n
           return (
             <Link
               key={scholarship.id}
-              href={`/scholarships/scholarshipdetails?id=${scholarship.id}`}
+              href={`/scholarships/scholarshipdetails?id=${scholarship.slug}`}
               className="block group hover:bg-gray-50 rounded-lg p-3 transition-colors"
             >
               <div className="flex gap-3">

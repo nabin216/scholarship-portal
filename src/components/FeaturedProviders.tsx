@@ -5,8 +5,9 @@ import './scrollbar-hide.css';
 
 interface ScholarshipProvider {
   id: number;
+  slug: string;
   title: string;
-  image?: string; // Making this optional since it might not exist
+  image?: string;
   country_name?: string;
   country?: {
     name: string;
@@ -115,7 +116,7 @@ const FeaturedProviders = () => {
             <div
               key={provider.id}
               className="providers-scroll-card bg-white p-6 rounded-lg text-center hover:shadow-lg transition-all duration-200 flex flex-col cursor-pointer transform hover:scale-105"
-              onClick={() => window.location.href = `/scholarships/scholarshipdetails?id=${provider.id}`}
+              onClick={() => window.location.href = `/scholarships/scholarshipdetails?id=${provider.slug}`}
             >
               <div className="mb-4 flex-shrink-0">
                 <img
