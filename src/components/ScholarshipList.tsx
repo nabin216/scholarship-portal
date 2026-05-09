@@ -6,6 +6,7 @@ import config from '../utils/config';
 
 interface Scholarship {
   id: number;
+  slug: string;
   title: string;
   description: string;
   provider: string;

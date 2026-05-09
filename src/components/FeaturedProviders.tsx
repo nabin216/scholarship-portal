@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import './scrollbar-hide.css';
 
 interface ScholarshipProvider {
   id: number;
+  slug: string;
   title: string;
-  image?: string; // Making this optional since it might not exist
+  image?: string;
   country_name?: string;
   country?: {
     name: string;
@@ -21,10 +21,9 @@ const FeaturedProviders = () => {
   const [providers, setProviders] = useState<ScholarshipProvider[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  
-  const scrollContainer = React.useRef<HTMLDivElement>(null);
-    useEffect(() => {    const fetchFeaturedScholarships = async () => {
+
+  useEffect(() => {
+    const fetchFeaturedScholarships = async () => {
       try {
         setLoading(true);
         // Fetch featured scholarships from the backend
@@ -88,47 +87,19 @@ const FeaturedProviders = () => {
     fetchFeaturedScholarships();
   }, []);
   
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainer.current) {
-      const container = scrollContainer.current;
-      const scrollAmount = 300; // Adjust as needed
-      
-      if (direction === 'left') {
-        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        setScrollPosition(Math.max(0, scrollPosition - scrollAmount));
-      } else {
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        setScrollPosition(scrollPosition + scrollAmount);
-      }
-    }
-  };
-  
-  const showLeftArrow = scrollPosition > 0;
-  const showRightArrow = scrollContainer.current ? 
-    scrollContainer.current.scrollWidth > scrollContainer.current.clientWidth + scrollPosition : 
-    providers.length > 5;
-  
   return (
-    <div className="relative">
-      {/* Left arrow (only show if not at the start) */}
-      {showLeftArrow && (
-        <button 
-          onClick={() => scroll('left')} 
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
-          aria-label="Scroll left"
-        >
-          <ChevronLeftIcon className="h-5 w-5 text-gray-600" />
-        </button>
-      )}
-        {/* Scholarship providers container with horizontal scroll */}
-      <div 
-        ref={scrollContainer}
-        className="flex overflow-x-auto scrollbar-hide gap-4 py-2"
+    <div className="w-full">
+      {/* Two-row horizontal scroll; shows 5 cards side-by-side on large screens */}
+      <div
+        className="providers-scroll-grid scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >        {loading ? (
-          // Loading skeletons
-          Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="min-w-[240px] w-[240px] h-[280px] flex-shrink-0 bg-gray-100 p-6 rounded-lg animate-pulse flex flex-col">
+      >
+        {loading ? (
+          Array.from({ length: 10 }).map((_, index) => (
+            <div
+              key={index}
+              className="providers-scroll-card bg-gray-100 p-6 rounded-lg animate-pulse flex flex-col"
+            >
               <div className="w-full h-32 bg-gray-200 rounded mb-4 flex-shrink-0"></div>
               <div className="h-4 bg-gray-200 rounded mb-2"></div>
               <div className="h-4 bg-gray-200 rounded mb-4"></div>
@@ -139,22 +110,25 @@ const FeaturedProviders = () => {
         ) : error ? (
           <div className="p-4 text-red-600">Error: {error}</div>
         ) : !Array.isArray(providers) || providers.length === 0 ? (
-          <div className="p-4 text-gray-500">No featured scholarships available</div>        ) : (
-          providers.map(provider => (            <div 
-              key={provider.id} 
-              className="min-w-[240px] w-[240px] h-[290px] flex-shrink-0 bg-white p-6 rounded-lg text-center hover:shadow-lg transition-all duration-200 flex flex-col cursor-pointer transform hover:scale-105"
-              onClick={() => window.location.href = `/scholarships/scholarshipdetails?id=${provider.id}`}
+          <div className="p-4 text-gray-500">No featured scholarships available</div>
+        ) : (
+          providers.map((provider) => (
+            <div
+              key={provider.id}
+              className="providers-scroll-card bg-white p-6 rounded-lg text-center hover:shadow-lg transition-all duration-200 flex flex-col cursor-pointer transform hover:scale-105"
+              onClick={() => window.location.href = `/scholarships/scholarshipdetails?id=${provider.slug}`}
             >
               <div className="mb-4 flex-shrink-0">
-                <img 
-                  src={provider.image || '/images/providers/scholarship-default.jpg'} 
-                  alt={provider.title} 
-                  className="w-full h-32 object-cover rounded" 
+                <img
+                  src={provider.image || '/images/providers/scholarship-default.jpg'}
+                  alt={provider.title}
+                  className="w-full h-32 object-cover rounded"
                   onError={(e) => {
                     e.currentTarget.src = '/images/providers/scholarship-default.jpg';
                   }}
                 />
-              </div>              <div className="flex-grow flex flex-col">
+              </div>
+              <div className="flex-grow flex flex-col">
                 <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 min-h-[2.5rem] leading-tight">
                   {provider.title}
                 </h3>
@@ -167,17 +141,6 @@ const FeaturedProviders = () => {
           ))
         )}
       </div>
-      
-      {/* Right arrow (only show if not at the end) */}
-      {showRightArrow && (
-        <button 
-          onClick={() => scroll('right')} 
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md"
-          aria-label="Scroll right"
-        >
-          <ChevronRightIcon className="h-5 w-5 text-gray-600" />
-        </button>
-      )}
     </div>
   );
 };
