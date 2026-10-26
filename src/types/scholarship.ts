@@ -35,6 +35,7 @@ export interface Country {
 
 export interface Scholarship {
   id: number;
+  slug: string;
   title: string;
   description: string;
   requirements?: string;

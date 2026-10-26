@@ -1,7 +1,11 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import LiveChat from '@/components/LiveChat';
 
 const SupportTeam = () => {
+  const [chatOpen, setChatOpen] = React.useState(false);
   const supportChannels = [
     {
       title: "Live Chat",
@@ -13,7 +17,7 @@ const SupportTeam = () => {
       ),
       availability: "Mon-Fri, 9 AM - 6 PM EST",
       action: "Start Chat",
-      href: "#chat",
+      onClick: () => setChatOpen(true),
       color: "blue"
     },
     {
@@ -77,6 +81,7 @@ const SupportTeam = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <LiveChat defaultOpen={chatOpen} />
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -104,12 +109,21 @@ const SupportTeam = () => {
                 </div>
                 <p className="text-gray-600 mb-4">{channel.description}</p>
                 <p className="text-sm text-gray-500 mb-4">{channel.availability}</p>
-                <a 
-                  href={channel.href}
-                  className={`inline-block w-full text-center bg-${channel.color}-600 text-white px-4 py-2 rounded-lg hover:bg-${channel.color}-700 transition-colors font-medium`}
-                >
-                  {channel.action}
-                </a>
+                {channel.title === "Live Chat" ? (
+                  <button
+                    onClick={() => setChatOpen(true)}
+                    className={`inline-block w-full text-center bg-${channel.color}-600 text-white px-4 py-2 rounded-lg hover:bg-${channel.color}-700 transition-colors font-medium cursor-pointer`}
+                  >
+                    {channel.action}
+                  </button>
+                ) : (
+                  <a 
+                    href={channel.href}
+                    className={`inline-block w-full text-center bg-${channel.color}-600 text-white px-4 py-2 rounded-lg hover:bg-${channel.color}-700 transition-colors font-medium`}
+                  >
+                    {channel.action}
+                  </a>
+                )}
               </div>
             ))}
           </div>

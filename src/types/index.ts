@@ -1,5 +1,6 @@
 export interface Scholarship {
     id: string;
+    slug: string;
     title: string;
     description: string;
     amount: number;
